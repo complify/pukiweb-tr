@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Logo from "@/components/Logo";
+import PaymentMarks from "@/components/PaymentMarks";
 
 export default function Footer() {
   return (
@@ -39,9 +40,12 @@ export default function Footer() {
         </div>
       </div>
       <div className="border-t border-[#eef1f6]">
-        <div className="container-p py-4 text-xs text-muted flex flex-col sm:flex-row justify-between gap-2">
-          <span>© {new Date().getFullYear()} Puki Yazılım Teknoloji A.Ş. Tüm hakları saklıdır.</span>
-          <span>TR &amp; EU veri bölgesi</span>
+        <div className="container-p py-5 flex flex-col md:flex-row items-center justify-between gap-4">
+          <span className="text-xs text-muted order-2 md:order-1">© {new Date().getFullYear()} Puki Yazılım Teknoloji A.Ş. Tüm hakları saklıdır.</span>
+          <div className="flex items-center gap-3 order-1 md:order-2">
+            <span className="text-[.7rem] font-semibold text-muted">Güvenli ödeme</span>
+            <PaymentMarks />
+          </div>
         </div>
       </div>
     </footer>

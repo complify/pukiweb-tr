@@ -36,18 +36,16 @@ export default function PricingConfigurator() {
   };
 
   const checkout = () => {
-    const payload = { modules: codes, seats, region, billing, promo: q.promo, total: q.total };
-    // Sonraki adım: iyzico ödeme → onay → /api/provision. Şimdilik özet gösteriyoruz.
-    alert(
-      "Sipariş özeti (ödeme adımı yakın — iyzico):\n\n" +
-        `Modüller: ${codes.join(", ")}\n` +
-        `Kullanıcı: ${seats}\n` +
-        `Bölge: ${region.toUpperCase()}\n` +
-        `Dönem: ${billing === "annual" ? "Yıllık" : "Aylık"}\n` +
-        `Promosyon: ${q.promo ?? "yok"}\n` +
-        `Toplam: ${fmt(q.total)}`
-    );
-    console.log("checkout payload", payload);
+    if (!codes.length) return;
+    // Planı checkout sayfasına taşı → iyzico ödeme → onay kuyruğu → /api/provision.
+    const params = new URLSearchParams({
+      modules: codes.join(","),
+      seats: String(seats),
+      region,
+      billing,
+    });
+    if (q.promo) params.set("promo", q.promo);
+    window.location.href = `/odeme?${params.toString()}`;
   };
 
   return (
