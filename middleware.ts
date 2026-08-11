@@ -1,32 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
+import { SESSION_COOKIE, verifySession } from "@/lib/auth";
 
 export const config = { matcher: ["/admin/:path*", "/api/admin/:path*"] };
 
-// /admin ve /api/admin uçlarını HTTP Basic Auth ile korur.
-// Vercel'de ADMIN_USER (varsayılan "admin") ve ADMIN_PASSWORD env değerlerini tanımlayın.
-export function middleware(req: NextRequest) {
-  const user = process.env.ADMIN_USER || "admin";
-  const pass = process.env.ADMIN_PASSWORD;
+// Giriş yapmadan erişilebilen uçlar
+const PUBLIC = new Set(["/admin/giris", "/api/admin/login"]);
 
-  // Parola tanımlı değilse: üretimde eriş(tir)me, geliştirmede serbest bırak.
-  if (!pass) {
-    if (process.env.NODE_ENV !== "production") return NextResponse.next();
-    return new NextResponse("ADMIN_PASSWORD tanımlı değil.", { status: 503 });
+export async function middleware(req: NextRequest) {
+  const { pathname } = req.nextUrl;
+  if (PUBLIC.has(pathname)) return NextResponse.next();
+
+  const token = req.cookies.get(SESSION_COOKIE)?.value;
+  const session = await verifySession(token);
+
+  if (session) return NextResponse.next();
+
+  // API uçları için 401, sayfalar için giriş sayfasına yönlendir
+  if (pathname.startsWith("/api/")) {
+    return NextResponse.json({ error: "Oturum gerekli" }, { status: 401 });
   }
-
-  const auth = req.headers.get("authorization");
-  if (auth?.startsWith("Basic ")) {
-    try {
-      const decoded = atob(auth.slice(6));
-      const i = decoded.indexOf(":");
-      const u = decoded.slice(0, i);
-      const p = decoded.slice(i + 1);
-      if (u === user && p === pass) return NextResponse.next();
-    } catch {}
-  }
-
-  return new NextResponse("Yetki gerekli.", {
-    status: 401,
-    headers: { "WWW-Authenticate": 'Basic realm="Puki Admin"' },
-  });
+  const url = req.nextUrl.clone();
+  url.pathname = "/admin/giris";
+  url.searchParams.set("next", pathname);
+  return NextResponse.redirect(url);
 }
