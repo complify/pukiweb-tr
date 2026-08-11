@@ -25,7 +25,7 @@ export default function Home() {
               Modülleri keşfedin →
             </a>
           </div>
-          <p className="mt-4 text-sm text-muted">Kredi kartı ile hızlı kurulum · Net fiyat (KDV yok) · TR & EU veri bölgesi</p>
+          <p className="mt-4 text-sm text-muted">Kredi kartı ile hızlı kurulum · Şeffaf fiyat · TR & EU veri bölgesi</p>
         </div>
       </section>
 
@@ -35,7 +35,11 @@ export default function Home() {
         <p className="text-center text-muted mt-2">İhtiyacınız olanı seçin — à la carte, istediğiniz an ekleyin.</p>
         <div className="mt-10 grid gap-5 md:grid-cols-2">
           {CATALOG.modules.map((m) => (
-            <div key={m.code} className="bg-white border border-[#e7ebf1] rounded-xl2 shadow-card p-6">
+            <Link
+              key={m.code}
+              href={`/moduller/${m.code}`}
+              className="block bg-white border border-[#e7ebf1] rounded-xl2 shadow-card p-6 hover:border-puki hover:shadow-soft transition-all"
+            >
               <div className="flex items-start justify-between">
                 <div>
                   <div className="text-xs font-bold uppercase tracking-widest text-puki-dark">{m.iso}</div>
@@ -47,10 +51,15 @@ export default function Home() {
                 </div>
               </div>
               <p className="mt-3 text-[#5e6278] text-sm leading-relaxed">{m.blurb}</p>
-            </div>
+              <span className="mt-4 inline-block text-sm font-bold text-puki-dark">Detayları görün →</span>
+            </Link>
           ))}
         </div>
-        <div className="text-center mt-8">
+        <p className="text-center text-sm text-muted mt-6">
+          Ayrıca kuruma özel: <Link href="/moduller/qms" className="font-bold text-puki-dark hover:text-puki">Puki QMS (ISO 9001)</Link> ve{" "}
+          <Link href="/moduller/tisax" className="font-bold text-puki-dark hover:text-puki">Puki TISAX</Link> — teklifle sunulur.
+        </p>
+        <div className="text-center mt-6">
           <Link href="/fiyatlandirma" className="text-base font-bold text-white bg-puki hover:bg-puki-dark px-6 py-3 rounded-xl shadow-soft">
             Fiyatı hesaplayın
           </Link>
@@ -66,7 +75,7 @@ export default function Home() {
               ["Dakikalar içinde kurulum", "Satın alın, hesabınız hazır olsun. Danışman beklemeden başlayın."],
               ["Tek platform, çok standart", "27001, KVKK/27701, 22301, 42001 aynı arayüzde — çapraz veri, tek gerçek."],
               ["Veriniz sizin bölgenizde", "TR müşteri → Türkiye, EU müşteri → Avrupa. Data residency baştan çözülü."],
-              ["Küçük işletmeye göre fiyat", "1-5 kullanıcı standart, sonrası kullanıcı başı. Net fiyat, KDV yok."],
+              ["Küçük işletmeye göre fiyat", "1-5 kullanıcı standart, sonrası kullanıcı başı. Şeffaf, sürprizsiz fiyat."],
               ["Risk → aksiyon → kanıt", "Riskten düzeltici faaliyete, denetimden kanıta uçtan uca akış."],
               ["Her an ölçeklenir", "Kullanıcı ekleyin, modül ekleyin — aboneliğiniz anında güncellensin."],
             ].map(([t, d]) => (

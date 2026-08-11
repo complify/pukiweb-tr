@@ -39,7 +39,7 @@ export default function PricingConfigurator() {
     const payload = { modules: codes, seats, region, billing, promo: q.promo, total: q.total };
     // Sonraki adım: iyzico ödeme → onay → /api/provision. Şimdilik özet gösteriyoruz.
     alert(
-      "Sipariş özeti (ödeme adımı yakında — iyzico):\n\n" +
+      "Sipariş özeti (ödeme adımı yakın — iyzico):\n\n" +
         `Modüller: ${codes.join(", ")}\n` +
         `Kullanıcı: ${seats}\n` +
         `Bölge: ${region.toUpperCase()}\n` +
@@ -186,7 +186,7 @@ export default function PricingConfigurator() {
             Devam et
           </button>
           <p className="text-[.72rem] text-muted mt-2.5 text-center leading-relaxed">
-            Fiyatlar nettir, KDV dahil değildir (Teknokent muafiyeti). Ödeme sonrası hesabınız onaylanıp giriş bilgileriniz e-posta ile gönderilir.
+            Ödeme sonrası hesabınız onaylanıp giriş bilgileriniz e-posta ile gönderilir.
           </p>
         </div>
       </div>

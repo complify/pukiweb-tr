@@ -1,20 +1,24 @@
+import Link from "next/link";
+import Logo from "@/components/Logo";
+
 export default function Footer() {
   return (
     <footer className="border-t border-[#e7ebf1] bg-white">
       <div className="container-p py-10 grid gap-8 md:grid-cols-4 text-sm">
         <div>
-          <div className="flex items-center gap-2.5 mb-3">
-            <span className="w-7 h-7 rounded-lg bg-gradient-to-br from-puki to-puki-dark" />
-            <b className="text-ink text-lg">Puki</b>
+          <div className="mb-3">
+            <Logo markClass="h-6 w-auto" wordClass="text-ink text-lg font-extrabold" />
           </div>
           <p className="text-muted leading-relaxed">Küçük işletmeler için bulut GRC — yönetim sistemlerinizi tek platformda.</p>
         </div>
         <div>
           <div className="font-bold text-ink mb-3">Ürün</div>
           <ul className="space-y-2 text-[#5e6278]">
-            <li><a href="/#moduller" className="hover:text-puki-dark">Modüller</a></li>
+            <li><Link href="/moduller/bgys" className="hover:text-puki-dark">Puki ISMS</Link></li>
+            <li><Link href="/moduller/kvys" className="hover:text-puki-dark">Puki PIMS</Link></li>
+            <li><Link href="/moduller/isys" className="hover:text-puki-dark">Puki İSYS</Link></li>
+            <li><Link href="/moduller/yzys" className="hover:text-puki-dark">Puki YZYS</Link></li>
             <li><a href="/fiyatlandirma" className="hover:text-puki-dark">Fiyatlandırma</a></li>
-            <li><a href="https://tr.pukisoft.com/login" className="hover:text-puki-dark">Giriş</a></li>
           </ul>
         </div>
         <div>
@@ -22,22 +26,22 @@ export default function Footer() {
           <ul className="space-y-2 text-[#5e6278]">
             <li>ISO 27001 · ISO 27701</li>
             <li>KVKK · ISO 22301</li>
-            <li>ISO 42001</li>
+            <li>ISO 42001 · ISO 9001 · TISAX</li>
           </ul>
         </div>
         <div>
-          <div className="font-bold text-ink mb-3">Kurumsal</div>
-          <ul className="space-y-2 text-[#5e6278]">
-            <li>Teknokent firması</li>
-            <li>TR & EU veri bölgesi</li>
-            <li>info@puki.com.tr</li>
-          </ul>
+          <div className="font-bold text-ink mb-3">İletişim</div>
+          <address className="not-italic space-y-2 text-[#5e6278] leading-relaxed">
+            <div>Puki Yazılım Teknoloji A.Ş.<br />Ulutek TGB, Görükle Mah.<br />Üniversite-1 Cad. No:933<br />16059, Nilüfer / BURSA</div>
+            <div><a href="tel:+902243230443" className="hover:text-puki-dark">+90 224 323 0 443</a></div>
+            <div><a href="mailto:destek@puki.com.tr" className="hover:text-puki-dark">destek@puki.com.tr</a></div>
+          </address>
         </div>
       </div>
       <div className="border-t border-[#eef1f6]">
         <div className="container-p py-4 text-xs text-muted flex flex-col sm:flex-row justify-between gap-2">
-          <span>© {new Date().getFullYear()} Puki. Tüm hakları saklıdır.</span>
-          <span>Fiyatlar nettir (Teknokent KDV muafiyeti).</span>
+          <span>© {new Date().getFullYear()} Puki Yazılım Teknoloji A.Ş. Tüm hakları saklıdır.</span>
+          <span>TR &amp; EU veri bölgesi</span>
         </div>
       </div>
     </footer>

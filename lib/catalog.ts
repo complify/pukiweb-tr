@@ -20,9 +20,9 @@ export const CATALOG = {
   annualMonths: 10,   // yıllık = 10 x aylık (2 ay bedava)
   maxSelfServiceSeats: 10,
   modules: [
-    { code: "bgys", name: "BGYS", iso: "ISO 27001", systemModules: ["bgys"], basePrice: 3750, perUser: 750, includedSeats: 5,
+    { code: "bgys", name: "ISMS", iso: "ISO 27001", systemModules: ["bgys"], basePrice: 3750, perUser: 750, includedSeats: 5,
       blurb: "Bilgi Güvenliği Yönetim Sistemi — risk, SoA, olay ve fırsat yönetimi." },
-    { code: "kvys", name: "KVYS", iso: "ISO 27701 + KVKK", systemModules: ["gdpr", "pims"], basePrice: 3000, perUser: 600, includedSeats: 5,
+    { code: "kvys", name: "PIMS", iso: "ISO 27701 + KVKK", systemModules: ["gdpr", "pims"], basePrice: 3000, perUser: 600, includedSeats: 5,
       blurb: "Kişisel Veri Yönetim Sistemi — KVKK envanteri, PIMS ve uyum." },
     { code: "isys", name: "İSYS", iso: "ISO 22301", systemModules: ["bcms"], basePrice: 2500, perUser: 500, includedSeats: 5,
       blurb: "İş Sürekliliği Yönetim Sistemi — BIA, iş sürekliliği planı ve tatbikatlar." },
