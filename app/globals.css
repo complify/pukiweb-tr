@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+body {
+  @apply bg-[#f6f7fb] text-[#3f4754] antialiased;
+}
+
+.container-p {
+  @apply max-w-6xl mx-auto px-5;
+}

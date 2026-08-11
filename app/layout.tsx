@@ -1,0 +1,22 @@
+import type { Metadata } from "next";
+import "./globals.css";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+
+export const metadata: Metadata = {
+  title: "Puki — ISO 27001, KVKK, İş Sürekliliği ve YZ Yönetim Sistemleri (GRC SaaS)",
+  description:
+    "Puki ile BGYS (ISO 27001), KVYS (KVKK & ISO 27701), İSYS (ISO 22301) ve YZYS (ISO 42001) yönetim sistemlerinizi tek platformda yönetin. Küçük işletmeler için bulut GRC.",
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="tr">
+      <body className="min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-1">{children}</main>
+        <Footer />
+      </body>
+    </html>
+  );
+}
