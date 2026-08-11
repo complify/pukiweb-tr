@@ -84,7 +84,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: result.errorMessage || "iyzico başlatma hatası", raw: result }, { status: 502 });
     }
 
-    saveOrder({
+    await saveOrder({
       ref,
       status: "pending_payment",
       createdAt: Date.now(),
