@@ -40,6 +40,21 @@ export default function Footer() {
         </div>
       </div>
       <div className="border-t border-[#eef1f6]">
+        <div className="container-p py-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-[#5e6278]">
+          <a href="/aydinlatma-metni" className="hover:text-puki-dark">Aydınlatma Metni</a>
+          <span className="text-[#e0e5ec]">·</span>
+          <a href="/gizlilik" className="hover:text-puki-dark">Gizlilik Politikası</a>
+          <span className="text-[#e0e5ec]">·</span>
+          <a href="/cerez-politikasi" className="hover:text-puki-dark">Çerez Politikası</a>
+          <span className="text-[#e0e5ec]">·</span>
+          <a href="/kullanim-kosullari" className="hover:text-puki-dark">Kullanım Koşulları</a>
+          <span className="text-[#e0e5ec]">·</span>
+          <a href="/mesafeli-satis" className="hover:text-puki-dark">Mesafeli Satış Sözleşmesi</a>
+          <span className="text-[#e0e5ec]">·</span>
+          <a href="/on-bilgilendirme" className="hover:text-puki-dark">Ön Bilgilendirme</a>
+        </div>
+      </div>
+      <div className="border-t border-[#eef1f6]">
         <div className="container-p py-5 flex flex-col md:flex-row items-center justify-between gap-4">
           <span className="text-xs text-muted order-2 md:order-1">© {new Date().getFullYear()} Puki Yazılım Teknoloji A.Ş. Tüm hakları saklıdır.</span>
           <div className="flex items-center gap-3 order-1 md:order-2">

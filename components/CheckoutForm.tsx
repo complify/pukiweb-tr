@@ -20,6 +20,7 @@ export default function CheckoutForm() {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [consent, setConsent] = useState(false);
 
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));
@@ -28,6 +29,7 @@ export default function CheckoutForm() {
     e.preventDefault();
     setError(null);
     if (!modules.length) { setError("Plan bulunamadı. Lütfen fiyatlandırmadan tekrar seçin."); return; }
+    if (!consent) { setError("Devam etmek için mesafeli satış sözleşmesi ve ön bilgilendirme formunu onaylamanız gerekir."); return; }
     setLoading(true);
     try {
       const res = await fetch("/api/checkout/init", {
@@ -71,9 +73,19 @@ export default function CheckoutForm() {
           <label className="text-sm"><span className="font-semibold text-ink">Şehir</span><input value={form.city} onChange={set("city")} className={`${inputCls} mt-1`} /></label>
           <label className="text-sm sm:col-span-2"><span className="font-semibold text-ink">Adres</span><input value={form.address} onChange={set("address")} className={`${inputCls} mt-1`} /></label>
         </div>
+        <div className="mx-5 mb-3">
+          <label className="flex items-start gap-2.5 text-[.8rem] text-[#5e6278] leading-relaxed cursor-pointer">
+            <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-0.5 w-4 h-4 accent-[#7cb518] shrink-0" />
+            <span>
+              <a href="/mesafeli-satis" target="_blank" className="text-puki-dark font-semibold hover:text-puki underline underline-offset-2">Mesafeli Satış Sözleşmesi</a>’ni,{" "}
+              <a href="/on-bilgilendirme" target="_blank" className="text-puki-dark font-semibold hover:text-puki underline underline-offset-2">Ön Bilgilendirme Formu</a>’nu ve{" "}
+              <a href="/aydinlatma-metni" target="_blank" className="text-puki-dark font-semibold hover:text-puki underline underline-offset-2">Aydınlatma Metni</a>’ni okudum, onaylıyorum.
+            </span>
+          </label>
+        </div>
         {error && <div className="mx-5 mb-3 text-sm text-red-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2">{error}</div>}
         <div className="px-5 pb-5">
-          <button disabled={loading} className="w-full py-3.5 rounded-xl font-extrabold text-white bg-puki hover:bg-puki-dark shadow-soft disabled:bg-[#cbd5e1] disabled:shadow-none">
+          <button disabled={loading || !consent} className="w-full py-3.5 rounded-xl font-extrabold text-white bg-puki hover:bg-puki-dark shadow-soft disabled:bg-[#cbd5e1] disabled:shadow-none">
             {loading ? "iyzico'ya yönlendiriliyor…" : `Güvenli ödemeye geç · ${fmt(q.total)}`}
           </button>
           <div className="mt-4 flex items-center justify-center gap-3 opacity-90"><PaymentMarks /></div>
