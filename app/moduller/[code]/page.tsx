@@ -2,6 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MODULE_DETAILS, allModuleCodes, moduleDetail } from "@/lib/module-content";
 import { moduleByCode, fmt } from "@/lib/catalog";
+import ModuleIcon from "@/components/ModuleIcon";
+import ModuleVisual from "@/components/ModuleVisual";
 
 export function generateStaticParams() {
   return allModuleCodes().map((code) => ({ code }));
@@ -11,10 +13,18 @@ export function generateMetadata({ params }: { params: { code: string } }) {
   const d = moduleDetail(params.code);
   if (!d) return { title: "Modül — Puki" };
   return {
-    title: `${d.name} (${d.iso}) — Puki`,
+    title: `Puki ${d.name} (${d.iso}) — Puki`,
     description: `${d.tagline}. ${d.overview[0]}`,
   };
 }
+
+// GRC akış adımları (tüm modüllerde ortak mantık)
+const FLOW = [
+  ["Envanter", "Varlık, süreç ve gereksinimleri kayıt altına alın."],
+  ["Değerlendirme", "Risk / uygunluk analizini yapılandırılmış biçimde yürütün."],
+  ["Aksiyon", "Eksikleri düzeltici faaliyet ve görevlere bağlayın."],
+  ["Kanıt", "Denetime hazır kayıt ve raporları otomatik biriktirin."],
+];
 
 export default function ModulePage({ params }: { params: { code: string } }) {
   const d = moduleDetail(params.code);
@@ -25,128 +35,182 @@ export default function ModulePage({ params }: { params: { code: string } }) {
 
   return (
     <>
-      {/* Hero */}
-      <section className="bg-gradient-to-b from-white to-[#f6f7fb] border-b border-[#eef1f6]">
-        <div className="container-p py-14 md:py-20">
-          <Link href="/#moduller" className="text-sm font-semibold text-puki-dark hover:text-puki">
-            ← Tüm modüller
-          </Link>
-          <div className="mt-5 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-            <div>
-              <div className="text-xs font-bold uppercase tracking-widest text-puki-dark">{d.iso}</div>
-              <h1 className="mt-1 text-4xl font-extrabold text-ink tracking-tight">{d.name}</h1>
-              <p className="mt-2 text-lg text-[#5e6278]">{d.tagline}</p>
+      {/* ================= HERO ================= */}
+      <section className="hero-dark text-white relative overflow-hidden">
+        <div className="container-p py-16 md:py-24 grid lg:grid-cols-2 gap-14 items-center">
+          <div className="animate-fadeup">
+            <Link href="/#moduller" className="text-sm font-semibold text-white/60 hover:text-white">
+              ← Tüm modüller
+            </Link>
+            <div className="mt-5 flex items-center gap-4">
+              <span className="w-14 h-14 rounded-xl2 bg-puki text-white grid place-items-center shadow-soft shrink-0">
+                <ModuleIcon code={d.code} className="w-7 h-7" />
+              </span>
+              <div>
+                <div className="text-xs font-bold uppercase tracking-widest text-puki">{d.iso}</div>
+                <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight leading-tight">Puki {d.name}</h1>
+              </div>
             </div>
-            {price && !d.quoteOnly ? (
-              <div className="bg-white border border-[#e7ebf1] rounded-xl2 shadow-card px-5 py-4 text-right shrink-0">
-                <div className="text-2xl font-extrabold text-ink">{fmt(price.basePrice)}</div>
-                <div className="text-xs text-muted">/ay · 1-5 kullanıcı · ek kullanıcı {fmt(price.perUser)}</div>
-                <Link
-                  href="/fiyatlandirma"
-                  className="mt-3 inline-block text-sm font-bold text-white bg-puki hover:bg-puki-dark px-4 py-2 rounded-xl shadow-soft"
-                >
-                  Planınıza ekleyin
-                </Link>
-              </div>
-            ) : (
-              <div className="bg-white border border-[#e7ebf1] rounded-xl2 shadow-card px-5 py-4 text-right shrink-0">
-                <div className="text-sm font-bold text-ink">Kuruma özel teklif</div>
-                <div className="text-xs text-muted">İhtiyacınıza göre fiyatlandırma</div>
-                <Link
-                  href="/iletisim"
-                  className="mt-3 inline-block text-sm font-bold text-white bg-puki hover:bg-puki-dark px-4 py-2 rounded-xl shadow-soft"
-                >
-                  Teklif alın
-                </Link>
-              </div>
-            )}
+            <p className="mt-5 max-w-xl text-lg text-white/70 leading-relaxed">{d.tagline}</p>
+            <p className="mt-3 max-w-xl text-white/55 leading-relaxed">{d.overview[0]}</p>
+
+            <div className="mt-8 flex flex-wrap items-center gap-4">
+              {price && !d.quoteOnly ? (
+                <>
+                  <Link href="/fiyatlandirma" className="text-base font-bold text-ink bg-white hover:bg-puki hover:text-white transition-colors px-6 py-3.5 rounded-xl shadow-soft">
+                    Planınıza ekleyin
+                  </Link>
+                  <div className="text-sm text-white/70">
+                    <span className="text-2xl font-extrabold text-white">{fmt(price.basePrice)}</span> /ay
+                    <span className="text-white/45"> · 1-5 kullanıcı · ek {fmt(price.perUser)}</span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <Link href="/iletisim" className="text-base font-bold text-ink bg-white hover:bg-puki hover:text-white transition-colors px-6 py-3.5 rounded-xl shadow-soft">
+                    Teklif alın
+                  </Link>
+                  <div className="text-sm text-white/60">Kuruma özel fiyatlandırma</div>
+                </>
+              )}
+            </div>
+          </div>
+
+          <div className="lg:pl-6">
+            <ModuleVisual detail={d} />
           </div>
         </div>
       </section>
 
-      {/* Genel bakış */}
-      <section className="container-p py-14">
+      {/* ================= GENEL BAKIŞ + YAN PANEL ================= */}
+      <section className="container-p py-16">
         <div className="grid gap-10 md:grid-cols-3">
           <div className="md:col-span-2">
-            <h2 className="text-2xl font-extrabold text-ink">Genel bakış</h2>
-            <div className="mt-4 space-y-4 text-[#5e6278] leading-relaxed">
+            <span className="eyebrow">Genel bakış</span>
+            <div className="mt-4 space-y-4 text-[#5e6278] leading-relaxed text-[1.05rem]">
               {d.overview.map((p, i) => (
                 <p key={i}>{p}</p>
               ))}
             </div>
-
-            <h2 className="mt-12 text-2xl font-extrabold text-ink">Özellikler</h2>
-            <div className="mt-5 grid gap-4 sm:grid-cols-2">
-              {d.features.map((f) => (
-                <div key={f.title} className="bg-white border border-[#e7ebf1] rounded-xl2 shadow-card p-5">
-                  <div className="w-9 h-9 rounded-lg bg-puki-light flex items-center justify-center text-puki-dark font-black">✓</div>
-                  <div className="font-bold text-ink mt-3">{f.title}</div>
-                  <p className="text-sm text-[#5e6278] mt-1 leading-relaxed">{f.desc}</p>
-                </div>
-              ))}
-            </div>
           </div>
-
-          {/* Yan panel */}
-          <aside className="space-y-6">
+          <aside className="space-y-4">
             <div className="bg-white border border-[#e7ebf1] rounded-xl2 shadow-card p-5">
               <div className="font-bold text-ink">Kimler için?</div>
               <p className="text-sm text-[#5e6278] mt-2 leading-relaxed">{d.audience}</p>
             </div>
             <div className="bg-white border border-[#e7ebf1] rounded-xl2 shadow-card p-5">
               <div className="font-bold text-ink">Kapsanan standartlar</div>
-              <ul className="mt-2 space-y-1.5 text-sm text-[#5e6278]">
-                {d.standards.map((s) => (
-                  <li key={s}>· {s}</li>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {d.standards.map((st) => (
+                  <span key={st} className="text-xs font-bold text-puki-dark bg-puki-light px-2.5 py-1 rounded-full">{st}</span>
                 ))}
-              </ul>
-            </div>
-            <div className="bg-white border border-[#e7ebf1] rounded-xl2 shadow-card p-5">
-              <div className="font-bold text-ink">Çıktılar & kanıtlar</div>
-              <ul className="mt-2 space-y-1.5 text-sm text-[#5e6278]">
-                {d.outcomes.map((o) => (
-                  <li key={o}>· {o}</li>
-                ))}
-              </ul>
+              </div>
             </div>
           </aside>
         </div>
       </section>
 
-      {/* Diğer modüller */}
-      <section className="bg-white border-t border-[#eef1f6]">
-        <div className="container-p py-14">
-          <h2 className="text-xl font-extrabold text-ink">Diğer modüller</h2>
-          <div className="mt-6 grid gap-4 sm:grid-cols-3">
-            {others.map((m) => (
-              <Link
-                key={m.code}
-                href={`/moduller/${m.code}`}
-                className="block bg-white border border-[#e7ebf1] rounded-xl2 shadow-card p-5 hover:border-puki transition-colors"
-              >
-                <div className="text-xs font-bold uppercase tracking-widest text-puki-dark">{m.iso}</div>
-                <div className="text-lg font-extrabold text-ink mt-1">{m.name}</div>
-                <div className="text-sm text-[#5e6278] mt-1">{m.tagline}</div>
-              </Link>
+      {/* ================= ÖZELLİKLER ================= */}
+      <section className="grid-soft border-y border-[#eef1f6]">
+        <div className="container-p py-16">
+          <div className="text-center max-w-2xl mx-auto">
+            <span className="eyebrow">Özellikler</span>
+            <h2 className="mt-3 text-3xl font-extrabold text-ink tracking-tight">{d.name} ile neler yaparsınız?</h2>
+          </div>
+          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {d.features.map((f, i) => (
+              <div key={f.title} className="bg-white border border-[#e7ebf1] rounded-xl3 shadow-card p-6 hover:shadow-lift transition-shadow">
+                <div className="flex items-center gap-3">
+                  <span className="w-10 h-10 rounded-xl2 bg-puki-light text-puki-dark grid place-items-center font-extrabold">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <div className="font-bold text-ink leading-tight">{f.title}</div>
+                </div>
+                <p className="text-sm text-[#5e6278] mt-3 leading-relaxed">{f.desc}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="container-p py-16 text-center">
-        <h2 className="text-2xl font-extrabold text-ink">{d.name} ile başlamaya hazır mısınız?</h2>
-        <p className="text-muted mt-2">
-          {d.quoteOnly
-            ? "Kurumunuza özel bir teklif için bize ulaşın."
-            : "Modülü planınıza ekleyin, birkaç dakikada kurulumu tamamlayın."}
-        </p>
-        <Link
-          href={d.quoteOnly ? "/iletisim" : "/fiyatlandirma"}
-          className="inline-block mt-6 text-base font-bold text-white bg-puki hover:bg-puki-dark px-7 py-3 rounded-xl shadow-soft"
-        >
-          {d.quoteOnly ? "Teklif alın" : "Planınızı oluşturun"}
-        </Link>
+      {/* ================= AKIŞ ================= */}
+      <section className="container-p py-16">
+        <div className="text-center max-w-2xl mx-auto">
+          <span className="eyebrow">Nasıl işler</span>
+          <h2 className="mt-3 text-3xl font-extrabold text-ink tracking-tight">Envanterden kanıta</h2>
+          <p className="text-muted mt-3">Puki {d.name} sizi baştan sona aynı akışta yürütür — dağınık dosyalar değil, tek gerçek.</p>
+        </div>
+        <div className="mt-10 grid gap-4 md:grid-cols-4">
+          {FLOW.map(([t, dsc], i) => (
+            <div key={t} className="relative bg-white border border-[#e7ebf1] rounded-xl3 shadow-card p-6">
+              <div className="w-10 h-10 rounded-xl2 bg-ink text-white grid place-items-center font-extrabold">{i + 1}</div>
+              <div className="font-bold text-ink mt-3">{t}</div>
+              <p className="text-sm text-[#5e6278] mt-1.5 leading-relaxed">{dsc}</p>
+              {i < FLOW.length - 1 && (
+                <span className="hidden md:block absolute top-1/2 -right-2.5 text-puki text-xl font-black">→</span>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ================= ÇIKTILAR ================= */}
+      <section className="bg-white border-y border-[#eef1f6]">
+        <div className="container-p py-14">
+          <div className="grid md:grid-cols-3 gap-6 items-start">
+            <div>
+              <span className="eyebrow">Çıktılar</span>
+              <h2 className="mt-3 text-2xl font-extrabold text-ink tracking-tight">Denetime hazır kanıtlar</h2>
+              <p className="text-muted mt-2 text-sm">Puki {d.name} çalıştıkça, sertifikasyon ve denetimde ihtiyacınız olan kayıtlar kendiliğinden oluşur.</p>
+            </div>
+            <div className="md:col-span-2 grid sm:grid-cols-2 gap-3">
+              {d.outcomes.map((o) => (
+                <div key={o} className="flex items-center gap-3 bg-[#f9fbf5] border border-[#e7ebf1] rounded-xl2 px-4 py-3">
+                  <span className="w-6 h-6 rounded-lg bg-puki grid place-items-center text-white text-xs font-black shrink-0">✓</span>
+                  <span className="text-sm font-semibold text-ink">{o}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ================= DİĞER MODÜLLER ================= */}
+      <section className="container-p py-16">
+        <h2 className="text-xl font-extrabold text-ink">Diğer modüller</h2>
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          {others.map((m) => (
+            <Link
+              key={m.code}
+              href={`/moduller/${m.code}`}
+              className="group block bg-white border border-[#e7ebf1] rounded-xl2 shadow-card p-5 hover:shadow-lift hover:-translate-y-0.5 transition-all"
+            >
+              <span className="w-10 h-10 rounded-xl2 bg-puki-light text-puki-dark grid place-items-center group-hover:bg-puki group-hover:text-white transition-colors">
+                <ModuleIcon code={m.code} className="w-5 h-5" />
+              </span>
+              <div className="text-[.62rem] font-bold uppercase tracking-widest text-puki-dark mt-3">{m.iso}</div>
+              <div className="font-extrabold text-ink leading-tight">Puki {m.name}</div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* ================= CTA ================= */}
+      <section className="container-p pb-24">
+        <div className="hero-dark rounded-xl3 px-8 py-16 text-center">
+          <h2 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">Puki {d.name} ile başlayın</h2>
+          <p className="text-white/70 mt-3 max-w-xl mx-auto">
+            {d.quoteOnly
+              ? "Kurumunuza özel bir teklif için bize ulaşın."
+              : "Modülü planınıza ekleyin, birkaç dakikada kurulumu tamamlayın."}
+          </p>
+          <Link
+            href={d.quoteOnly ? "/iletisim" : "/fiyatlandirma"}
+            className="inline-block mt-7 text-base font-bold text-ink bg-white hover:bg-puki hover:text-white transition-colors px-7 py-3.5 rounded-xl shadow-soft"
+          >
+            {d.quoteOnly ? "Teklif alın" : "Planınızı oluşturun"}
+          </Link>
+        </div>
       </section>
     </>
   );
