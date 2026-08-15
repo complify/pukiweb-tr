@@ -4,6 +4,7 @@ import { MODULE_DETAILS, allModuleCodes, moduleDetail } from "@/lib/module-conte
 import ModuleIcon from "@/components/ModuleIcon";
 import ModuleVisual from "@/components/ModuleVisual";
 import { getLang } from "@/lib/lang-server";
+import { getDict } from "@/lib/i18n";
 
 export const dynamic = "force-dynamic";
 
@@ -21,18 +22,13 @@ export function generateMetadata({ params }: { params: { code: string } }) {
   };
 }
 
-// GRC akış adımları (tüm modüllerde ortak mantık)
-const FLOW = [
-  ["Envanter", "Varlık, süreç ve gereksinimleri kayıt altına alın."],
-  ["Değerlendirme", "Risk / uygunluk analizini yapılandırılmış biçimde yürütün."],
-  ["Aksiyon", "Eksikleri düzeltici faaliyet ve görevlere bağlayın."],
-  ["Kanıt", "Denetime hazır kayıt ve raporları otomatik biriktirin."],
-];
-
 export default function ModulePage({ params }: { params: { code: string } }) {
   const d = moduleDetail(params.code);
   if (!d) notFound();
   const lang = getLang();
+  const M = getDict(lang).modulePage;
+  const nm = `Puki ${d.name}`;
+  const FLOW: [string, string][] = [[M.f1t, M.f1d], [M.f2t, M.f2d], [M.f3t, M.f3d], [M.f4t, M.f4d]];
 
   const others = Object.values(MODULE_DETAILS).filter((m) => m.code !== d.code);
 
@@ -43,7 +39,7 @@ export default function ModulePage({ params }: { params: { code: string } }) {
         <div className="container-p py-16 md:py-24 grid lg:grid-cols-2 gap-14 items-center">
           <div className="animate-fadeup">
             <Link href="/#moduller" className="text-sm font-semibold text-white/60 hover:text-white">
-              ← Tüm modüller
+              {M.back}
             </Link>
             <div className="mt-5 flex items-center gap-4">
               <span className="w-14 h-14 rounded-xl2 bg-puki text-white grid place-items-center shadow-soft shrink-0">
@@ -59,9 +55,9 @@ export default function ModulePage({ params }: { params: { code: string } }) {
 
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <Link href="/demo" className="text-base font-bold text-ink bg-white hover:bg-puki hover:text-white transition-colors px-6 py-3.5 rounded-xl shadow-soft">
-                Demo Talep Et
+                {getDict(lang).cta.requestDemo}
               </Link>
-              <div className="text-sm text-white/60">Kuruma özel fiyatlandırma · teklife özel</div>
+              <div className="text-sm text-white/60">{M.quoteText}</div>
             </div>
           </div>
 
@@ -75,7 +71,7 @@ export default function ModulePage({ params }: { params: { code: string } }) {
       <section className="container-p py-16">
         <div className="grid gap-10 md:grid-cols-3">
           <div className="md:col-span-2">
-            <span className="eyebrow">Genel bakış</span>
+            <span className="eyebrow">{M.overviewEyebrow}</span>
             <div className="mt-4 space-y-4 text-[#5e6278] leading-relaxed text-[1.05rem]">
               {d.overview.map((p, i) => (
                 <p key={i}>{p}</p>
@@ -84,11 +80,11 @@ export default function ModulePage({ params }: { params: { code: string } }) {
           </div>
           <aside className="space-y-4">
             <div className="bg-white border border-[#e7ebf1] rounded-xl2 shadow-card p-5">
-              <div className="font-bold text-ink">Kimler için?</div>
+              <div className="font-bold text-ink">{M.audienceTitle}</div>
               <p className="text-sm text-[#5e6278] mt-2 leading-relaxed">{d.audience}</p>
             </div>
             <div className="bg-white border border-[#e7ebf1] rounded-xl2 shadow-card p-5">
-              <div className="font-bold text-ink">Kapsanan standartlar</div>
+              <div className="font-bold text-ink">{M.standardsTitle}</div>
               <div className="mt-3 flex flex-wrap gap-2">
                 {d.standards.map((st) => (
                   <span key={st} className="text-xs font-bold text-puki-dark bg-puki-light px-2.5 py-1 rounded-full">{st}</span>
@@ -103,8 +99,8 @@ export default function ModulePage({ params }: { params: { code: string } }) {
       <section className="grid-soft border-y border-[#eef1f6]">
         <div className="container-p py-16">
           <div className="text-center max-w-2xl mx-auto">
-            <span className="eyebrow">Özellikler</span>
-            <h2 className="mt-3 text-3xl font-extrabold text-ink tracking-tight">{d.name} ile neler yaparsınız?</h2>
+            <span className="eyebrow">{M.featuresEyebrow}</span>
+            <h2 className="mt-3 text-3xl font-extrabold text-ink tracking-tight">{M.featuresHeading.replace("%s", d.name)}</h2>
           </div>
           <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {d.features.map((f, i) => (
@@ -125,9 +121,9 @@ export default function ModulePage({ params }: { params: { code: string } }) {
       {/* ================= AKIŞ ================= */}
       <section className="container-p py-16">
         <div className="text-center max-w-2xl mx-auto">
-          <span className="eyebrow">Nasıl işler</span>
-          <h2 className="mt-3 text-3xl font-extrabold text-ink tracking-tight">Envanterden kanıta</h2>
-          <p className="text-muted mt-3">Puki {d.name} sizi baştan sona aynı akışta yürütür — dağınık dosyalar değil, tek gerçek.</p>
+          <span className="eyebrow">{M.flowEyebrow}</span>
+          <h2 className="mt-3 text-3xl font-extrabold text-ink tracking-tight">{M.flowTitle}</h2>
+          <p className="text-muted mt-3">{M.flowSub.replace("%s", d.name)}</p>
         </div>
         <div className="mt-10 grid gap-4 md:grid-cols-4">
           {FLOW.map(([t, dsc], i) => (
@@ -148,9 +144,9 @@ export default function ModulePage({ params }: { params: { code: string } }) {
         <div className="container-p py-14">
           <div className="grid md:grid-cols-3 gap-6 items-start">
             <div>
-              <span className="eyebrow">Çıktılar</span>
-              <h2 className="mt-3 text-2xl font-extrabold text-ink tracking-tight">Denetime hazır kanıtlar</h2>
-              <p className="text-muted mt-2 text-sm">Puki {d.name} çalıştıkça, sertifikasyon ve denetimde ihtiyacınız olan kayıtlar kendiliğinden oluşur.</p>
+              <span className="eyebrow">{M.outcomesEyebrow}</span>
+              <h2 className="mt-3 text-2xl font-extrabold text-ink tracking-tight">{M.outcomesTitle}</h2>
+              <p className="text-muted mt-2 text-sm">{M.outcomesSub.replace("%s", d.name)}</p>
             </div>
             <div className="md:col-span-2 grid sm:grid-cols-2 gap-3">
               {d.outcomes.map((o) => (
@@ -166,7 +162,7 @@ export default function ModulePage({ params }: { params: { code: string } }) {
 
       {/* ================= DİĞER MODÜLLER ================= */}
       <section className="container-p py-16">
-        <h2 className="text-xl font-extrabold text-ink">Diğer modüller</h2>
+        <h2 className="text-xl font-extrabold text-ink">{M.otherModules}</h2>
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
           {others.map((m) => (
             <Link
@@ -187,15 +183,13 @@ export default function ModulePage({ params }: { params: { code: string } }) {
       {/* ================= CTA ================= */}
       <section className="container-p pb-24">
         <div className="hero-dark rounded-xl3 px-8 py-16 text-center">
-          <h2 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">Puki {d.name} ile başlayın</h2>
-          <p className="text-white/70 mt-3 max-w-xl mx-auto">
-            Kısa bir demo planlayalım, kurumunuza özel teklifimizi sunalım.
-          </p>
+          <h2 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">{M.ctaHeading.replace("%s", d.name)}</h2>
+          <p className="text-white/70 mt-3 max-w-xl mx-auto">{M.ctaSub}</p>
           <Link
             href="/demo"
             className="inline-block mt-7 text-base font-bold text-ink bg-white hover:bg-puki hover:text-white transition-colors px-7 py-3.5 rounded-xl shadow-soft"
           >
-            Demo Talep Et
+            {getDict(lang).cta.requestDemo}
           </Link>
         </div>
       </section>
