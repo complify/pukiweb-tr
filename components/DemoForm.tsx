@@ -5,7 +5,7 @@ import Link from "next/link";
 import { MODULE_DETAILS } from "@/lib/module-content";
 
 // Demo formunda seçilebilecek modüller (tanıtım sırası)
-const MODULE_ORDER = ["bgys", "kvys", "isys", "yzys", "qms", "tisax"];
+const MODULE_ORDER = ["bgys", "kvys", "isys", "yzys", "soc2", "tisax", "spice", "itsm", "qms", "egitim"];
 const MODULES = MODULE_ORDER.map((code) => MODULE_DETAILS[code]).filter(Boolean);
 
 export default function DemoForm() {

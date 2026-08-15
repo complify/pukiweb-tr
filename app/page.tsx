@@ -1,22 +1,10 @@
 import Link from "next/link";
-import { CATALOG } from "@/lib/catalog";
 import DashboardMock from "@/components/DashboardMock";
+import ModuleIcon from "@/components/ModuleIcon";
+import { MODULE_DETAILS } from "@/lib/module-content";
 
-// Modül ikonları (kod bazlı)
-const ICONS: Record<string, JSX.Element> = {
-  bgys: (
-    <path d="M12 2l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V5l7-3z" />
-  ),
-  kvys: (
-    <path d="M12 2a5 5 0 015 5v3h1a2 2 0 012 2v7a2 2 0 01-2 2H6a2 2 0 01-2-2v-7a2 2 0 012-2h1V7a5 5 0 015-5zm0 2a3 3 0 00-3 3v3h6V7a3 3 0 00-3-3z" />
-  ),
-  isys: (
-    <path d="M12 4V1L8 5l4 4V6a6 6 0 11-6 6H4a8 8 0 108-8z" />
-  ),
-  yzys: (
-    <path d="M9 2h6v2h3a1 1 0 011 1v3h2v6h-2v3a1 1 0 01-1 1h-3v2H9v-2H6a1 1 0 01-1-1v-3H3V8h2V5a1 1 0 011-1h3V2zm0 6v8h6V8H9z" />
-  ),
-};
+// Ana sayfa modül vitrini sırası
+const GRID_ORDER = ["bgys", "kvys", "isys", "yzys", "soc2", "tisax", "spice", "itsm", "qms", "egitim"];
 
 export default function Home() {
   return (
@@ -63,7 +51,7 @@ export default function Home() {
       <section className="border-b border-[#eef1f6] bg-white">
         <div className="container-p grid grid-cols-2 md:grid-cols-4 divide-x divide-[#eef1f6]">
           {[
-            ["6", "yönetim sistemi modülü"],
+            ["10", "yönetim sistemi modülü"],
             ["Tek", "platform, çapraz veri"],
             ["TR & EU", "veri bölgesi seçimi"],
             ["Dakikalar", "içinde kurulum"],
@@ -83,37 +71,38 @@ export default function Home() {
           <h2 className="mt-3 text-3xl md:text-4xl font-extrabold text-ink tracking-tight">İhtiyacınız olanı seçin</h2>
           <p className="text-muted mt-3">À la carte — ister tek modül, ister hepsi. İstediğiniz an ekleyin, aboneliğiniz anında güncellensin.</p>
         </div>
-        <div className="mt-12 grid gap-6 md:grid-cols-2">
-          {CATALOG.modules.map((m) => (
-            <Link
-              key={m.code}
-              href={`/moduller/${m.code}`}
-              className="group relative block bg-white border border-[#e7ebf1] rounded-xl3 shadow-card p-7 hover:shadow-lift hover:-translate-y-1 transition-all duration-200"
-            >
-              <div className="flex items-start justify-between">
-                <div className="flex items-center gap-4">
-                  <span className="w-12 h-12 rounded-xl2 bg-puki-light text-puki-dark grid place-items-center group-hover:bg-puki group-hover:text-white transition-colors">
-                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">{ICONS[m.code]}</svg>
-                  </span>
-                  <div>
-                    <div className="text-[.68rem] font-bold uppercase tracking-widest text-puki-dark">{m.iso}</div>
-                    <div className="text-xl font-extrabold text-ink leading-tight">Puki {m.name}</div>
+        <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {GRID_ORDER.map((code) => {
+            const m = MODULE_DETAILS[code];
+            if (!m) return null;
+            return (
+              <Link
+                key={code}
+                href={`/moduller/${code}`}
+                className="group relative block bg-white border border-[#e7ebf1] rounded-xl3 shadow-card p-6 hover:shadow-lift hover:-translate-y-1 transition-all duration-200"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <span className="w-11 h-11 rounded-xl2 bg-puki-light text-puki-dark grid place-items-center shrink-0 group-hover:bg-puki group-hover:text-white transition-colors">
+                      <ModuleIcon code={code} className="w-6 h-6" />
+                    </span>
+                    <div className="min-w-0">
+                      <div className="text-[.62rem] font-bold uppercase tracking-widest text-puki-dark truncate">{m.iso}</div>
+                      <div className="text-lg font-extrabold text-ink leading-tight">Puki {m.name}</div>
+                    </div>
                   </div>
+                  <span className="text-[.6rem] font-bold uppercase tracking-widest text-puki-dark bg-puki-light px-2 py-1 rounded-full shrink-0">Teklife özel</span>
                 </div>
-                <div className="text-right shrink-0">
-                  <span className="text-[.68rem] font-bold uppercase tracking-widest text-puki-dark bg-puki-light px-2.5 py-1 rounded-full">Teklife özel</span>
-                </div>
-              </div>
-              <p className="mt-4 text-[#5e6278] text-sm leading-relaxed">{m.blurb}</p>
-              <span className="mt-5 inline-flex items-center gap-1 text-sm font-bold text-puki-dark group-hover:gap-2 transition-all">
-                Detayları görün <span aria-hidden>→</span>
-              </span>
-            </Link>
-          ))}
+                <p className="mt-4 text-[#5e6278] text-sm leading-relaxed">{m.tagline}</p>
+                <span className="mt-4 inline-flex items-center gap-1 text-sm font-bold text-puki-dark group-hover:gap-2 transition-all">
+                  Detayları görün <span aria-hidden>→</span>
+                </span>
+              </Link>
+            );
+          })}
         </div>
         <p className="text-center text-sm text-muted mt-8">
-          Ayrıca kuruma özel: <Link href="/moduller/qms" className="font-bold text-puki-dark hover:text-puki">Puki QMS (ISO 9001)</Link> ve{" "}
-          <Link href="/moduller/tisax" className="font-bold text-puki-dark hover:text-puki">Puki TISAX</Link> — teklifle sunulur.
+          İhtiyacınıza uygun modülleri birlikte belirleyelim — <Link href="/demo" className="font-bold text-puki-dark hover:text-puki">demo talep edin</Link>, size özel teklifimizi sunalım.
         </p>
       </section>
 

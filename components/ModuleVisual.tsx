@@ -9,6 +9,10 @@ const STATS: Record<string, { ready: number; a: [string, string]; b: [string, st
   yzys: { ready: 58, a: ["7", "YZ sistemi"], b: ["5", "etki değerlendirmesi"] },
   qms: { ready: 76, a: ["48", "süreç & KPI"], b: ["6", "açık DÖF"] },
   tisax: { ready: 69, a: ["100+", "VDA ISA kontrolü"], b: ["3", "olgunluk gap"] },
+  soc2: { ready: 74, a: ["61", "TSC kontrolü"], b: ["5", "açık kanıt"] },
+  itsm: { ready: 67, a: ["24", "aktif hizmet"], b: ["8", "açık olay"] },
+  spice: { ready: 62, a: ["18", "değerlendirilen süreç"], b: ["4", "yetenek gap"] },
+  egitim: { ready: 81, a: ["12", "atanan eğitim"], b: ["37", "sertifika"] },
 };
 
 export default function ModuleVisual({ detail }: { detail: ModuleDetail }) {

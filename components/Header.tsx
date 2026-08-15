@@ -3,7 +3,7 @@ import Logo from "@/components/Logo";
 import { MODULE_DETAILS } from "@/lib/module-content";
 
 // "Puki GRC" menü sırası (kullanıcının belirlediği düzen)
-const GRC_ORDER = ["bgys", "qms", "kvys", "yzys", "isys", "tisax"];
+const GRC_ORDER = ["bgys", "kvys", "isys", "yzys", "soc2", "tisax", "spice", "itsm", "qms", "egitim"];
 
 export default function Header() {
   return (
@@ -22,8 +22,8 @@ export default function Header() {
                 <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
               </svg>
             </button>
-            <div className="absolute left-1/2 -translate-x-1/2 top-full pt-2 w-[300px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
-              <div className="bg-white border border-[#e7ebf1] rounded-xl2 shadow-card p-2">
+            <div className="absolute left-1/2 -translate-x-1/2 top-full pt-2 w-[340px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+              <div className="bg-white border border-[#e7ebf1] rounded-xl2 shadow-card p-2 max-h-[70vh] overflow-auto">
                 {GRC_ORDER.map((code) => {
                   const m = MODULE_DETAILS[code];
                   if (!m) return null;

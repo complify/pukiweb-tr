@@ -19,15 +19,18 @@ export default function Footer() {
             <li><Link href="/moduller/kvys" className="hover:text-puki-dark">Puki PIMS</Link></li>
             <li><Link href="/moduller/isys" className="hover:text-puki-dark">Puki İSYS</Link></li>
             <li><Link href="/moduller/yzys" className="hover:text-puki-dark">Puki YZYS</Link></li>
+            <li><Link href="/moduller/soc2" className="hover:text-puki-dark">Puki SOC 2</Link></li>
+            <li><Link href="/moduller/itsm" className="hover:text-puki-dark">Puki ITSM</Link></li>
+            <li><Link href="/moduller/egitim" className="hover:text-puki-dark">Puki Akademi</Link></li>
             <li><Link href="/demo" className="hover:text-puki-dark">Demo talep et</Link></li>
           </ul>
         </div>
         <div>
           <div className="font-bold text-ink mb-3">Standartlar</div>
           <ul className="space-y-2 text-[#5e6278]">
-            <li>ISO 27001 · ISO 27701</li>
-            <li>KVKK · ISO 22301</li>
-            <li>ISO 42001 · ISO 9001 · TISAX</li>
+            <li>ISO 27001 · ISO 27701 · KVKK</li>
+            <li>ISO 22301 · ISO 42001 · ISO 9001</li>
+            <li>SOC 2 · ISO 20000 · TISAX · ASPICE</li>
           </ul>
         </div>
         <div>
