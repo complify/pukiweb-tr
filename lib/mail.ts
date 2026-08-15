@@ -1,5 +1,6 @@
-// Basit e-posta gönderimi — Resend HTTP API (ek bağımlılık yok, Vercel-dostu).
-// RESEND_API_KEY tanımlı değilse sessizce atlar (lead yine de kaydedilir, panelde görünür).
+// E-posta gönderimi — SendGrid v3 HTTP API (ek bağımlılık yok).
+// Puki GRC ile aynı SendGrid altyapısı; puki.com.tr uzantılı adresten gönderir.
+// SENDGRID_API_KEY tanımlı değilse sessizce atlar (işlem yine de tamamlanır).
 
 export interface MailInput {
   to: string | string[];
@@ -8,29 +9,41 @@ export interface MailInput {
   replyTo?: string;
 }
 
-export const mailEnabled = !!process.env.RESEND_API_KEY;
+export const mailEnabled = !!process.env.SENDGRID_API_KEY;
+
+// "Puki <destek@puki.com.tr>" -> { name, email }
+function parseFrom(s: string): { email: string; name?: string } {
+  const m = s.match(/^\s*(.*?)\s*<([^>]+)>\s*$/);
+  if (m) return { name: m[1] || undefined, email: m[2].trim() };
+  return { email: s.trim() };
+}
 
 export async function sendMail(m: MailInput): Promise<boolean> {
-  const key = process.env.RESEND_API_KEY;
-  const from = process.env.MAIL_FROM || "Puki <hello@complify.io>";
+  const key = process.env.SENDGRID_API_KEY;
+  const fromRaw = process.env.MAIL_FROM || "Puki <destek@puki.com.tr>";
   if (!key) {
-    console.warn("[mail] RESEND_API_KEY yok — e-posta gönderimi atlandı.");
+    console.warn("[mail] SENDGRID_API_KEY yok — e-posta gönderimi atlandı.");
     return false;
   }
+  const from = parseFrom(fromRaw);
+  const toList = (Array.isArray(m.to) ? m.to : [m.to]).map((email) => ({ email }));
+
+  const body: any = {
+    personalizations: [{ to: toList }],
+    from,
+    subject: m.subject,
+    content: [{ type: "text/html", value: m.html }],
+  };
+  if (m.replyTo) body.reply_to = { email: m.replyTo };
+
   try {
-    const r = await fetch("https://api.resend.com/emails", {
+    const r = await fetch("https://api.sendgrid.com/v3/mail/send", {
       method: "POST",
       headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        from,
-        to: Array.isArray(m.to) ? m.to : [m.to],
-        subject: m.subject,
-        html: m.html,
-        ...(m.replyTo ? { reply_to: m.replyTo } : {}),
-      }),
+      body: JSON.stringify(body),
     });
-    if (!r.ok) {
-      console.error("[mail] gönderim hatası", r.status, await r.text().catch(() => ""));
+    if (r.status !== 202) {
+      console.error("[mail] SendGrid hatası", r.status, await r.text().catch(() => ""));
       return false;
     }
     return true;
@@ -40,7 +53,7 @@ export async function sendMail(m: MailInput): Promise<boolean> {
   }
 }
 
-// Alıcı: bildirimlerin gideceği iç e-posta (varsayılan: sahibin adresi).
+// Alıcı: iç bildirimlerin gideceği adres (varsayılan: sahibin adresi).
 export function notifyTo(): string {
   return process.env.LEAD_NOTIFY_TO || process.env.ADMIN_EMAIL || "omer@complify.io";
 }

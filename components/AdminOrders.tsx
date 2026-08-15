@@ -40,7 +40,7 @@ export default function AdminOrders({ initial, kvEnabled }: { initial: Order[]; 
       const r = await fetch("/api/admin/quotes/resend", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ref }) });
       const d = await r.json();
       if (!r.ok) throw new Error(d.error || "Gönderilemedi");
-      setMsg({ ref, ok: true, text: d.emailed ? "Ödeme linki müşteriye tekrar gönderildi." : "E-posta gönderilemedi (RESEND_API_KEY yok) — linki kopyalayıp elle iletin." });
+      setMsg({ ref, ok: true, text: d.emailed ? "Ödeme linki müşteriye tekrar gönderildi." : "E-posta gönderilemedi (SENDGRID_API_KEY yok/hatalı) — linki kopyalayıp elle iletin." });
     } catch (e: any) { setMsg({ ref, ok: false, text: e.message }); } finally { setBusy(null); }
   };
 

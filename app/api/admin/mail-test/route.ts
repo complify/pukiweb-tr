@@ -7,15 +7,13 @@ export const dynamic = "force-dynamic";
 // Admin girişi arkasında (middleware korur). Tarayıcıda /api/admin/mail-test açılınca test maili gönderir.
 export async function GET() {
   const to = notifyTo();
-  const from = process.env.MAIL_FROM || "Puki <hello@complify.io>";
-  const hasKey = !!process.env.RESEND_API_KEY;
+  const from = process.env.MAIL_FROM || "Puki <destek@puki.com.tr>";
+  const hasKey = !!process.env.SENDGRID_API_KEY;
 
   if (!hasKey) {
     return NextResponse.json({
-      ok: false,
-      hasKey,
-      to, from,
-      hint: "RESEND_API_KEY tanımlı değil. Vercel'de Resend entegrasyonunu bağlayın ve MAIL_FROM'u doğrulanmış adresinizle ayarlayın.",
+      ok: false, hasKey, to, from,
+      hint: "SENDGRID_API_KEY tanımlı değil. Vercel env'e GRC ile aynı SendGrid anahtarını ekleyin.",
     });
   }
 
@@ -29,10 +27,9 @@ export async function GET() {
   });
 
   return NextResponse.json({
-    ok: emailed,
-    hasKey, to, from,
+    ok: emailed, hasKey, to, from,
     hint: emailed
-      ? "Test maili gönderildi. Gelen kutunuzu (ve spam) kontrol edin. Gelmezse MAIL_FROM alan adının Resend'de doğrulandığından emin olun."
-      : "Gönderim başarısız. Genelde MAIL_FROM alan adı Resend'de doğrulanmamıştır ya da anahtar hatalıdır. Vercel loglarına bakın.",
+      ? "Test maili gönderildi (SendGrid 202). Gelen kutunuzu ve spam'i kontrol edin."
+      : "Gönderim başarısız. MAIL_FROM adresinin SendGrid'de doğrulanmış (domain authentication) olduğundan ve anahtarın doğru olduğundan emin olun. Vercel loglarına bakın.",
   });
 }

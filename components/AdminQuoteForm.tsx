@@ -94,7 +94,7 @@ export default function AdminQuoteForm() {
         </div>
         <h2 className="mt-5 text-2xl font-extrabold text-ink tracking-tight">Teklif oluşturuldu</h2>
         <p className="text-[#5e6278] mt-2">
-          Teklif no <b className="text-puki-dark">{done.ref}</b>. {done.emailed ? "Ödeme linki müşteriye e-posta ile gönderildi." : "E-posta gönderilemedi (RESEND_API_KEY yok) — linki manuel iletebilirsiniz."}
+          Teklif no <b className="text-puki-dark">{done.ref}</b>. {done.emailed ? "Ödeme linki müşteriye e-posta ile gönderildi." : "E-posta gönderilemedi (SENDGRID_API_KEY yok/hatalı) — linki manuel iletebilirsiniz."}
         </p>
         <div className="mt-5 flex items-center gap-2">
           <input readOnly value={done.link} className="flex-1 rounded-xl border border-[#e3e7ee] px-3 py-2.5 text-sm text-[#5e6278]" />
