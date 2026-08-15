@@ -29,6 +29,9 @@ export interface Order {
   iyzicoPaymentId?: string;
   provision?: { organizationId?: string | number; loginUrl?: string; at?: number };
   note?: string;
+  // --- Admin tarafından oluşturulan teklifler (Faz B) ---
+  origin?: "self" | "admin";        // "admin" = panelden oluşturulan teklif/ödeme linki
+  lineItems?: { code: string; name: string; price: number }[]; // teklif kalemleri (tahsil edilen)
 }
 
 // --- Upstash bağlantısı (env varsa) ---

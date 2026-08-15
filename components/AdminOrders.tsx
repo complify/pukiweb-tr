@@ -23,6 +23,29 @@ export default function AdminOrders({ initial, kvEnabled }: { initial: Order[]; 
     setOrders(d.orders || []);
   };
 
+  const [copied, setCopied] = useState<string | null>(null);
+
+  const linkFor = (ref: string) =>
+    (typeof window !== "undefined" ? window.location.origin : "") + `/odeme/${encodeURIComponent(ref)}`;
+
+  const copyLink = async (ref: string) => {
+    try { await navigator.clipboard.writeText(linkFor(ref)); setCopied(ref); setTimeout(() => setCopied(null), 1500); } catch {}
+  };
+
+  const resend = async (ref: string) => {
+    setBusy(ref); setMsg(null);
+    try {
+      const r = await fetch("/api/admin/quotes/resend", {
+        method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ref }),
+      });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.error || "Gönderilemedi");
+      setMsg({ ref, ok: true, text: d.emailed ? "Ödeme linki müşteriye tekrar gönderildi." : "E-posta gönderilemedi (RESEND_API_KEY yok) — linki kopyalayıp elle iletin." });
+    } catch (e: any) {
+      setMsg({ ref, ok: false, text: e.message });
+    } finally { setBusy(null); }
+  };
+
   const act = async (ref: string, action: "approve" | "reject") => {
     if (action === "reject" && !confirm("Bu siparişi reddetmek istediğinize emin misiniz?")) return;
     setBusy(ref); setMsg(null);
@@ -68,6 +91,7 @@ export default function AdminOrders({ initial, kvEnabled }: { initial: Order[]; 
                   <div className="flex items-center gap-2">
                     <span className="font-extrabold text-ink">{o.ref}</span>
                     <span className={`text-[.68rem] font-bold px-2 py-0.5 rounded-full ${st.cls}`}>{st.label}</span>
+                    {o.origin === "admin" && <span className="text-[.62rem] font-bold px-2 py-0.5 rounded-full bg-[#eef4ff] text-[#3b6fd4]">Teklif</span>}
                   </div>
                   <div className="text-sm text-[#5e6278] mt-1">
                     {o.customer.company} · {o.customer.firstName} {o.customer.lastName} · <a href={`mailto:${o.customer.email}`} className="text-puki-dark">{o.customer.email}</a>
@@ -96,6 +120,21 @@ export default function AdminOrders({ initial, kvEnabled }: { initial: Order[]; 
                   )}
                 </div>
               </div>
+              {o.status === "pending_payment" && (
+                <div className="mt-3 pt-3 border-t border-[#eef1f6] flex flex-wrap items-center gap-2">
+                  <a href={`/odeme/${encodeURIComponent(o.ref)}`} target="_blank" rel="noreferrer"
+                    className="text-xs font-semibold text-puki-dark hover:text-puki truncate max-w-[240px]">/odeme/{o.ref}</a>
+                  <div className="flex-1" />
+                  <button onClick={() => copyLink(o.ref)}
+                    className="text-xs font-semibold text-[#5e6278] hover:text-ink border border-[#e7ebf1] px-3 py-1.5 rounded-lg">
+                    {copied === o.ref ? "Kopyalandı" : "Linki kopyala"}
+                  </button>
+                  <button onClick={() => resend(o.ref)} disabled={busy === o.ref}
+                    className="text-xs font-bold text-white bg-puki hover:bg-puki-dark px-3 py-1.5 rounded-lg disabled:opacity-50">
+                    {busy === o.ref ? "Gönderiliyor…" : "Tekrar gönder"}
+                  </button>
+                </div>
+              )}
               {msg && msg.ref === o.ref && (
                 <div className={`mt-3 text-sm rounded-lg px-3 py-2 ${msg.ok ? "text-puki-dark bg-puki-light" : "text-red-600 bg-red-50 border border-red-100"}`}>{msg.text}</div>
               )}

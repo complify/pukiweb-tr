@@ -28,6 +28,18 @@ export const CATALOG = {
       blurb: "İş Sürekliliği Yönetim Sistemi — BIA, iş sürekliliği planı ve tatbikatlar." },
     { code: "yzys", name: "YZYS", iso: "ISO 42001", systemModules: ["aims"], basePrice: 2500, perUser: 500, includedSeats: 5,
       blurb: "Yapay Zekâ Yönetim Sistemi — AI etki değerlendirmesi ve risk." },
+    { code: "soc2", name: "SOC 2", iso: "SOC 2 (AICPA TSC)", systemModules: ["soc2"], basePrice: 3500, perUser: 700, includedSeats: 5,
+      blurb: "SOC 2 Güven Hizmetleri Kriterleri — kontrol eşleme, kanıt ve denetim hazırlığı." },
+    { code: "itsm", name: "ITSM", iso: "ISO/IEC 20000-1", systemModules: ["itsm"], basePrice: 3000, perUser: 600, includedSeats: 5,
+      blurb: "BT Hizmet Yönetim Sistemi — hizmet kataloğu, olay/problem/değişiklik yönetimi." },
+    { code: "spice", name: "SPICE", iso: "ISO/IEC 33000 · ASPICE", systemModules: ["spice"], basePrice: 3500, perUser: 700, includedSeats: 5,
+      blurb: "Süreç olgunluğu değerlendirmesi — yetenek seviyesi ve boşluk analizi." },
+    { code: "qms", name: "QMS", iso: "ISO 9001", systemModules: ["qms"], basePrice: 2500, perUser: 500, includedSeats: 5,
+      blurb: "Kalite Yönetim Sistemi — süreç, KPI, uygunsuzluk/DÖF ve iç denetim." },
+    { code: "tisax", name: "TISAX", iso: "TISAX · VDA ISA", systemModules: ["tisax"], basePrice: 3500, perUser: 700, includedSeats: 5,
+      blurb: "Otomotiv bilgi güvenliği (VDA ISA) — olgunluk değerlendirmesi ve gap analizi." },
+    { code: "egitim", name: "Akademi", iso: "Eğitim & Farkındalık", systemModules: ["academy"], basePrice: 1500, perUser: 300, includedSeats: 5,
+      blurb: "Eğitim ve farkındalık yönetimi — eğitim atama, tamamlanma ve sertifika takibi." },
   ] as CatalogModule[],
 };
 
