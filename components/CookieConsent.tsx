@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useDict } from "@/components/LangProvider";
 
 const KEY = "puki_cookie_consent";
 
 export default function CookieConsent() {
+  const c = useDict().cookie;
   const [show, setShow] = useState(false);
 
   useEffect(() => {
@@ -31,25 +33,21 @@ export default function CookieConsent() {
       <div className="container-p">
         <div className="bg-white border border-[#e7ebf1] rounded-xl2 shadow-lift p-5 md:flex md:items-center md:gap-6">
           <div className="text-sm text-[#5e6278] leading-relaxed">
-            <b className="text-ink">Çerez kullanımı.</b> Sitenin çalışması için zorunlu çerezleri kullanıyoruz.
-            İzin verirseniz deneyimi iyileştirmek için isteğe bağlı çerezler de kullanabiliriz. Ayrıntılar için{" "}
-            <Link href="/cerez-politikasi" className="text-puki-dark font-semibold hover:text-puki underline underline-offset-2">
-              Çerez Politikası
-            </Link>
-            .
+            <b className="text-ink">{c.title}</b> {c.body}
+            <Link href="/cerez-politikasi" className="text-puki-dark font-semibold hover:text-puki underline underline-offset-2">{c.policy}</Link>.
           </div>
           <div className="mt-4 md:mt-0 flex items-center gap-3 shrink-0">
             <button
               onClick={() => decide("essential")}
               className="text-sm font-semibold text-[#5e6278] hover:text-ink border border-[#e7ebf1] hover:border-[#c9d8ad] px-4 py-2.5 rounded-xl"
             >
-              Sadece zorunlu
+              {c.essential}
             </button>
             <button
               onClick={() => decide("all")}
               className="text-sm font-bold text-white bg-puki hover:bg-puki-dark px-5 py-2.5 rounded-xl shadow-soft"
             >
-              Tümünü kabul et
+              {c.acceptAll}
             </button>
           </div>
         </div>

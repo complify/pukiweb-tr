@@ -1,5 +1,14 @@
 // Hero için stilize GRC dashboard mockup'ı — saf JSX/Tailwind, dış görsel yok.
-export default function DashboardMock() {
+import type { Lang } from "@/lib/i18n";
+
+const D = {
+  panel: { tr: "Uyum Paneli", az: "Uyğunluq Paneli", en: "Compliance Panel" },
+  region: { tr: "TR bölge", az: "TR region", en: "TR region" },
+  score: { tr: "Uyum skoru", az: "Uyğunluq balı", en: "Compliance score" },
+  trend: { tr: "Risk kapanış trendi", az: "Risk bağlanma trendi", en: "Risk closure trend" },
+} as const;
+
+export default function DashboardMock({ lang = "tr" }: { lang?: Lang }) {
   const bars = [42, 68, 55, 80, 63, 90, 72];
   return (
     <div className="glass rounded-xl3 p-3 shadow-glow animate-floaty">
@@ -9,8 +18,8 @@ export default function DashboardMock() {
           <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
           <span className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
           <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
-          <span className="ml-3 text-[.66rem] font-semibold text-muted">puki · Uyum Paneli</span>
-          <span className="ml-auto text-[.6rem] font-bold text-puki-dark bg-puki-light px-2 py-0.5 rounded-full">TR bölge</span>
+          <span className="ml-3 text-[.66rem] font-semibold text-muted">puki · {D.panel[lang]}</span>
+          <span className="ml-auto text-[.6rem] font-bold text-puki-dark bg-puki-light px-2 py-0.5 rounded-full">{D.region[lang]}</span>
         </div>
 
         <div className="p-4 grid grid-cols-3 gap-3">
@@ -23,13 +32,13 @@ export default function DashboardMock() {
               </svg>
               <div className="absolute inset-0 grid place-items-center text-sm font-extrabold text-ink">%78</div>
             </div>
-            <div className="text-[.6rem] font-bold text-muted mt-2 uppercase tracking-wider">Uyum skoru</div>
+            <div className="text-[.6rem] font-bold text-muted mt-2 uppercase tracking-wider">{D.score[lang]}</div>
           </div>
 
           {/* mini bar grafik */}
           <div className="col-span-2 rounded-xl border border-[#eef1f6] p-3">
             <div className="flex items-center justify-between">
-              <div className="text-[.62rem] font-bold text-ink">Risk kapanış trendi</div>
+              <div className="text-[.62rem] font-bold text-ink">{D.trend[lang]}</div>
               <div className="text-[.55rem] font-bold text-puki-dark bg-puki-light px-1.5 py-0.5 rounded">↑ %24</div>
             </div>
             <div className="mt-3 flex items-end gap-1.5 h-14">

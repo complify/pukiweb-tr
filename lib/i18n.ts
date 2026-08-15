@@ -110,6 +110,23 @@ const tr = {
     otherModules: "Diğer modüller", ctaHeading: "Puki %s ile başlayın",
     ctaSub: "Kısa bir demo planlayalım, kurumunuza özel teklifimizi sunalım.",
   },
+  legal: {
+    badge: "Yasal", effectiveDate: "Yürürlük tarihi", dataController: "Veri Sorumlusu / Satıcı",
+    notice: "",
+  },
+  meta: {
+    homeTitle: "Puki — ISO 27001, KVKK, İş Sürekliliği ve YZ Yönetim Sistemleri (GRC SaaS)",
+    homeDesc: "Puki ile BGYS (ISO 27001), KVYS (KVKK & ISO 27701), İSYS (ISO 22301) ve YZYS (ISO 42001) yönetim sistemlerinizi tek platformda yönetin. Küçük işletmeler için bulut GRC.",
+    demoTitle: "Demo — Puki",
+    demoDesc: "Puki GRC'yi ekibinizle birlikte keşfedin. Kısa bir demo planlayalım, size özel teklifimizi sunalım.",
+    contactTitle: "İletişim — Puki",
+    contactDesc: "Puki iletişim bilgileri, adres ve teklif talebi.",
+  },
+  cookie: {
+    title: "Çerez kullanımı.",
+    body: "Sitenin çalışması için zorunlu çerezleri kullanıyoruz. İzin verirseniz deneyimi iyileştirmek için isteğe bağlı çerezler de kullanabiliriz. Ayrıntılar için ",
+    policy: "Çerez Politikası", essential: "Sadece zorunlu", acceptAll: "Tümünü kabul et",
+  },
   pay: {
     quoteEyebrow: "Teklifiniz", quoteNo: "Teklif no: ", scope: "Teklif kapsamı", total: "Toplam",
     monthly: "Aylık", annual: "Yıllık", freeMonths: "2 ay bedava", monthlySub: "Aylık abonelik", autoRenew: "otomatik yenilenir",
@@ -237,6 +254,23 @@ const az: Dict = {
     otherModules: "Digər modullar", ctaHeading: "Puki %s ilə başlayın",
     ctaSub: "Qısa bir demo planlaşdıraq, təşkilatınıza özəl təklifimizi təqdim edək.",
   },
+  legal: {
+    badge: "Hüquqi", effectiveDate: "Qüvvəyəminmə tarixi", dataController: "Məlumat Operatoru / Satıcı",
+    notice: "Bu hüquqi sənəd Türkiyə qanunvericiliyinə əsasən rəsmi dil olan Türk dilində təqdim olunur.",
+  },
+  meta: {
+    homeTitle: "Puki — ISO 27001, KVKK, Biznesin Fasiləsizliyi və Sİ İdarəetmə Sistemləri (GRC SaaS)",
+    homeDesc: "Puki ilə BGYS (ISO 27001), KVYS (KVKK & ISO 27701), İSYS (ISO 22301) və YZYS (ISO 42001) idarəetmə sistemlərinizi vahid platformada idarə edin. Kiçik bizneslər üçün bulud GRC.",
+    demoTitle: "Demo — Puki",
+    demoDesc: "Puki GRC-ni komandanızla kəşf edin. Qısa bir demo planlaşdıraq, sizə özəl təklifimizi təqdim edək.",
+    contactTitle: "Əlaqə — Puki",
+    contactDesc: "Puki əlaqə məlumatları, ünvan və təklif müraciəti.",
+  },
+  cookie: {
+    title: "Kuki istifadəsi.",
+    body: "Saytın işləməsi üçün zəruri kukilərdən istifadə edirik. İcazə versəniz, təcrübəni yaxşılaşdırmaq üçün istəyə bağlı kukilərdən də istifadə edə bilərik. Ətraflı üçün ",
+    policy: "Kuki Siyasəti", essential: "Yalnız zəruri", acceptAll: "Hamısını qəbul et",
+  },
   pay: {
     quoteEyebrow: "Təklifiniz", quoteNo: "Təklif №: ", scope: "Təklif əhatəsi", total: "Cəmi",
     monthly: "Aylıq", annual: "İllik", freeMonths: "2 ay pulsuz", monthlySub: "Aylıq abunəlik", autoRenew: "avtomatik yenilənir",
@@ -361,6 +395,23 @@ const en: Dict = {
     outcomesSub: "As Puki %s runs, the records you need for certification and audits build up on their own.",
     otherModules: "Other modules", ctaHeading: "Get started with Puki %s",
     ctaSub: "Let's schedule a short demo and give you a quote tailored to your organization.",
+  },
+  legal: {
+    badge: "Legal", effectiveDate: "Effective date", dataController: "Data Controller / Seller",
+    notice: "This legal document is provided in Turkish — its governing language under Turkish law.",
+  },
+  meta: {
+    homeTitle: "Puki — ISO 27001, GDPR, Business Continuity & AI Management Systems (GRC SaaS)",
+    homeDesc: "Manage ISMS (ISO 27001), PIMS (GDPR & ISO 27701), BCMS (ISO 22301) and AIMS (ISO 42001) on one platform with Puki. Cloud GRC for small businesses.",
+    demoTitle: "Demo — Puki",
+    demoDesc: "Explore Puki GRC with your team. Let's schedule a short demo and give you a custom quote.",
+    contactTitle: "Contact — Puki",
+    contactDesc: "Puki contact details, address and quote requests.",
+  },
+  cookie: {
+    title: "Cookie use.",
+    body: "We use essential cookies for the site to work. With your permission we may also use optional cookies to improve the experience. For details see ",
+    policy: "Cookie Policy", essential: "Essential only", acceptAll: "Accept all",
   },
   pay: {
     quoteEyebrow: "Your quote", quoteNo: "Quote no: ", scope: "Quote scope", total: "Total",

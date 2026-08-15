@@ -44,7 +44,7 @@ export default function Home() {
               ))}
             </div>
           </div>
-          <div className="lg:pl-6"><DashboardMock /></div>
+          <div className="lg:pl-6"><DashboardMock lang={lang} /></div>
         </div>
       </section>
 

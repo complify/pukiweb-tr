@@ -3,10 +3,10 @@ import { getLang } from "@/lib/lang-server";
 import { getDict } from "@/lib/i18n";
 
 export const dynamic = "force-dynamic";
-export const metadata = {
-  title: "İletişim — Puki",
-  description: "Puki Yazılım Teknoloji A.Ş. iletişim bilgileri, adres ve teklif talebi.",
-};
+export function generateMetadata() {
+  const m = getDict(getLang()).meta;
+  return { title: m.contactTitle, description: m.contactDesc };
+}
 
 export default function IletisimPage() {
   const t = getDict(getLang());

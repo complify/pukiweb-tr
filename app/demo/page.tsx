@@ -3,10 +3,10 @@ import { getLang } from "@/lib/lang-server";
 import { getDict } from "@/lib/i18n";
 
 export const dynamic = "force-dynamic";
-export const metadata = {
-  title: "Demo — Puki",
-  description: "Puki GRC'yi ekibinizle birlikte keşfedin. Kısa bir demo planlayalım, size özel teklifimizi sunalım.",
-};
+export function generateMetadata() {
+  const m = getDict(getLang()).meta;
+  return { title: m.demoTitle, description: m.demoDesc };
+}
 
 export default function DemoPage() {
   const t = getDict(getLang()).demo;

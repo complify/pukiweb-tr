@@ -9,7 +9,10 @@ export default function PayFlow({
 }: {
   refCode: string; monthlyTotal: number; annualMonths: number; offerAnnual: boolean; company: string;
 }) {
-  const P = useDict().pay;
+  const _d = useDict();
+  const P = _d.pay;
+  const CM = _d.common.perMonth;
+  const CY = _d.common.perYear;
   const [billing, setBilling] = useState<"monthly" | "annual">("monthly");
   const [inv, setInv] = useState({ type: "corporate" as "corporate" | "individual", title: company, taxId: "", taxOffice: "", address: "", city: "" });
   const [busy, setBusy] = useState(false);
@@ -52,7 +55,7 @@ export default function PayFlow({
       <div className="mt-6">
         <div className="flex items-center justify-between mb-3">
           <div className="text-sm font-bold text-ink">{P.cardTitle}</div>
-          <div className="text-sm font-semibold text-puki-dark">{fmt(total)}<span className="text-xs text-muted">{billing === "annual" ? "/yıl" : "/ay"}</span></div>
+          <div className="text-sm font-semibold text-puki-dark">{fmt(total)}<span className="text-xs text-muted">{billing === "annual" ? CY : CM}</span></div>
         </div>
         <div id="iyzipay-checkout-form" className="responsive" />
         <p className="text-xs text-muted mt-3 text-center">{P.cardSecure}{perLabel} {P.cancelShort}</p>
@@ -80,14 +83,14 @@ export default function PayFlow({
         <>
           <div className="text-sm font-bold text-ink mb-2">{P.billingPeriod}</div>
           <div className="flex gap-3">
-            {optCard("monthly", P.monthly, monthlyTotal, "/ay", P.autoRenew)}
-            {optCard("annual", P.annual, monthlyTotal * annualMonths, "/yıl", P.freeMonths)}
+            {optCard("monthly", P.monthly, monthlyTotal, CM, P.autoRenew)}
+            {optCard("annual", P.annual, monthlyTotal * annualMonths, CY, P.freeMonths)}
           </div>
         </>
       ) : (
         <div className="flex items-center justify-between rounded-xl2 border border-[#e7ebf1] px-4 py-3">
           <span className="text-sm font-semibold text-[#5e6278]">{P.monthlySub}</span>
-          <span className="text-lg font-extrabold text-ink">{fmt(monthlyTotal)}<span className="text-xs text-muted">/ay</span></span>
+          <span className="text-lg font-extrabold text-ink">{fmt(monthlyTotal)}<span className="text-xs text-muted">{CM}</span></span>
         </div>
       )}
 
@@ -118,7 +121,7 @@ export default function PayFlow({
 
       <div className="mt-6 flex items-center justify-between rounded-xl2 bg-[#f9fbf5] border border-[#e7ebf1] px-4 py-3">
         <span className="font-bold text-ink">{P.firstCharge}</span>
-        <span className="text-2xl font-extrabold text-puki-dark">{fmt(total)}<span className="text-sm text-muted font-semibold">{billing === "annual" ? "/yıl" : "/ay"}</span></span>
+        <span className="text-2xl font-extrabold text-puki-dark">{fmt(total)}<span className="text-sm text-muted font-semibold">{billing === "annual" ? CY : CM}</span></span>
       </div>
 
       {err && <div className="mt-3 text-sm text-red-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2">{err}</div>}

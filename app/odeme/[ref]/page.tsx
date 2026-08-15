@@ -42,7 +42,7 @@ export default async function OdemeRefPage({ params }: { params: { ref: string }
                 <div className="font-bold text-ink">{li.name}</div>
                 <div className="text-xs text-muted">{moduleByCode(li.code)?.iso || "GRC"}</div>
               </div>
-              <div className="font-semibold text-[#5e6278] whitespace-nowrap">{fmt(li.price)}<span className="text-xs text-muted">/ay</span></div>
+              <div className="font-semibold text-[#5e6278] whitespace-nowrap">{fmt(li.price)}<span className="text-xs text-muted">{t.common.perMonth}</span></div>
             </div>
           ))}
         </div>

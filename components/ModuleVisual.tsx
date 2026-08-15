@@ -7,21 +7,23 @@ const VIS = {
 } as const;
 
 // Modül başına sabit (deterministik) örnek metrikler — demo görseli.
-const STATS: Record<string, { ready: number; a: [string, string]; b: [string, string] }> = {
-  bgys: { ready: 88, a: ["93", "Annex A kontrolü"], b: ["4", "açık risk"] },
-  kvys: { ready: 71, a: ["156", "işleme faaliyeti"], b: ["2", "açık başvuru"] },
-  isys: { ready: 64, a: ["12", "kritik süreç"], b: ["3", "planlı tatbikat"] },
-  yzys: { ready: 58, a: ["7", "YZ sistemi"], b: ["5", "etki değerlendirmesi"] },
-  qms: { ready: 76, a: ["48", "süreç & KPI"], b: ["6", "açık DÖF"] },
-  tisax: { ready: 69, a: ["100+", "VDA ISA kontrolü"], b: ["3", "olgunluk gap"] },
-  soc2: { ready: 74, a: ["61", "TSC kontrolü"], b: ["5", "açık kanıt"] },
-  itsm: { ready: 67, a: ["24", "aktif hizmet"], b: ["8", "açık olay"] },
-  spice: { ready: 62, a: ["18", "değerlendirilen süreç"], b: ["4", "yetenek gap"] },
-  egitim: { ready: 81, a: ["12", "atanan eğitim"], b: ["37", "sertifika"] },
+type Loc = Record<Lang, string>;
+const L = (tr: string, az: string, en: string): Loc => ({ tr, az, en });
+const STATS: Record<string, { ready: number; a: [string, Loc]; b: [string, Loc] }> = {
+  bgys: { ready: 88, a: ["93", L("Annex A kontrolü", "Annex A nəzarəti", "Annex A controls")], b: ["4", L("açık risk", "açıq risk", "open risks")] },
+  kvys: { ready: 71, a: ["156", L("işleme faaliyeti", "emal fəaliyyəti", "processing activities")], b: ["2", L("açık başvuru", "açıq müraciət", "open requests")] },
+  isys: { ready: 64, a: ["12", L("kritik süreç", "kritik proses", "critical processes")], b: ["3", L("planlı tatbikat", "planlı məşq", "planned exercises")] },
+  yzys: { ready: 58, a: ["7", L("YZ sistemi", "Sİ sistemi", "AI systems")], b: ["5", L("etki değerlendirmesi", "təsir qiymətləndirməsi", "impact assessments")] },
+  qms: { ready: 76, a: ["48", L("süreç & KPI", "proses & KPI", "processes & KPIs")], b: ["6", L("açık DÖF", "açıq DÖF", "open CAPAs")] },
+  tisax: { ready: 69, a: ["100+", L("VDA ISA kontrolü", "VDA ISA nəzarəti", "VDA ISA controls")], b: ["3", L("olgunluk gap", "yetkinlik gap", "maturity gaps")] },
+  soc2: { ready: 74, a: ["61", L("TSC kontrolü", "TSC nəzarəti", "TSC controls")], b: ["5", L("açık kanıt", "açıq sübut", "open evidence")] },
+  itsm: { ready: 67, a: ["24", L("aktif hizmet", "aktiv xidmət", "active services")], b: ["8", L("açık olay", "açıq hadisə", "open incidents")] },
+  spice: { ready: 62, a: ["18", L("değerlendirilen süreç", "qiymətləndirilən proses", "assessed processes")], b: ["4", L("yetenek gap", "qabiliyyət gap", "capability gaps")] },
+  egitim: { ready: 81, a: ["12", L("atanan eğitim", "təyin olunan təlim", "assigned trainings")], b: ["37", L("sertifika", "sertifikat", "certificates")] },
 };
 
 export default function ModuleVisual({ detail, lang = "tr" }: { detail: { code: string; name: string; iso: string; outcomes: string[] }; lang?: Lang }) {
-  const s = STATS[detail.code] ?? { ready: 72, a: ["—", "kontrol"], b: ["—", "aksiyon"] };
+  const s = STATS[detail.code] ?? { ready: 72, a: ["—", L("kontrol", "nəzarət", "control")] as [string, Loc], b: ["—", L("aksiyon", "tədbir", "action")] as [string, Loc] };
   const ring = 97.4;
   const offset = ring * (1 - s.ready / 100);
 
@@ -60,7 +62,7 @@ export default function ModuleVisual({ detail, lang = "tr" }: { detail: { code: 
                   </span>
                   <div>
                     <div className="text-lg font-extrabold text-ink leading-none">{n}</div>
-                    <div className="text-[.6rem] font-bold text-muted uppercase tracking-wide mt-1">{l}</div>
+                    <div className="text-[.6rem] font-bold text-muted uppercase tracking-wide mt-1">{l[lang]}</div>
                   </div>
                 </div>
               ))}
