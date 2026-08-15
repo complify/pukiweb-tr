@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MODULE_DETAILS, allModuleCodes, moduleDetail } from "@/lib/module-content";
-import { moduleByCode, fmt } from "@/lib/catalog";
 import ModuleIcon from "@/components/ModuleIcon";
 import ModuleVisual from "@/components/ModuleVisual";
 
@@ -30,7 +29,6 @@ export default function ModulePage({ params }: { params: { code: string } }) {
   const d = moduleDetail(params.code);
   if (!d) notFound();
 
-  const price = moduleByCode(d.code);
   const others = Object.values(MODULE_DETAILS).filter((m) => m.code !== d.code);
 
   return (
@@ -55,24 +53,10 @@ export default function ModulePage({ params }: { params: { code: string } }) {
             <p className="mt-3 max-w-xl text-white/55 leading-relaxed">{d.overview[0]}</p>
 
             <div className="mt-8 flex flex-wrap items-center gap-4">
-              {price && !d.quoteOnly ? (
-                <>
-                  <Link href="/fiyatlandirma" className="text-base font-bold text-ink bg-white hover:bg-puki hover:text-white transition-colors px-6 py-3.5 rounded-xl shadow-soft">
-                    Planınıza ekleyin
-                  </Link>
-                  <div className="text-sm text-white/70">
-                    <span className="text-2xl font-extrabold text-white">{fmt(price.basePrice)}</span> /ay
-                    <span className="text-white/45"> · 1-5 kullanıcı · ek {fmt(price.perUser)}</span>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <Link href="/iletisim" className="text-base font-bold text-ink bg-white hover:bg-puki hover:text-white transition-colors px-6 py-3.5 rounded-xl shadow-soft">
-                    Teklif alın
-                  </Link>
-                  <div className="text-sm text-white/60">Kuruma özel fiyatlandırma</div>
-                </>
-              )}
+              <Link href="/demo" className="text-base font-bold text-ink bg-white hover:bg-puki hover:text-white transition-colors px-6 py-3.5 rounded-xl shadow-soft">
+                Demo Talep Et
+              </Link>
+              <div className="text-sm text-white/60">Kuruma özel fiyatlandırma · teklife özel</div>
             </div>
           </div>
 
@@ -200,15 +184,13 @@ export default function ModulePage({ params }: { params: { code: string } }) {
         <div className="hero-dark rounded-xl3 px-8 py-16 text-center">
           <h2 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">Puki {d.name} ile başlayın</h2>
           <p className="text-white/70 mt-3 max-w-xl mx-auto">
-            {d.quoteOnly
-              ? "Kurumunuza özel bir teklif için bize ulaşın."
-              : "Modülü planınıza ekleyin, birkaç dakikada kurulumu tamamlayın."}
+            Kısa bir demo planlayalım, kurumunuza özel teklifimizi sunalım.
           </p>
           <Link
-            href={d.quoteOnly ? "/iletisim" : "/fiyatlandirma"}
+            href="/demo"
             className="inline-block mt-7 text-base font-bold text-ink bg-white hover:bg-puki hover:text-white transition-colors px-7 py-3.5 rounded-xl shadow-soft"
           >
-            {d.quoteOnly ? "Teklif alın" : "Planınızı oluşturun"}
+            Demo Talep Et
           </Link>
         </div>
       </section>

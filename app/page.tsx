@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CATALOG, fmt } from "@/lib/catalog";
+import { CATALOG } from "@/lib/catalog";
 import DashboardMock from "@/components/DashboardMock";
 
 // Modül ikonları (kod bazlı)
@@ -36,8 +36,8 @@ export default function Home() {
               dokümanlarınızı dakikalar içinde yönetmeye başlayın.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Link href="/fiyatlandirma" className="text-base font-bold text-ink bg-white hover:bg-puki hover:text-white transition-colors px-6 py-3.5 rounded-xl shadow-soft">
-                Planınızı oluşturun
+              <Link href="/demo" className="text-base font-bold text-ink bg-white hover:bg-puki hover:text-white transition-colors px-6 py-3.5 rounded-xl shadow-soft">
+                Demo Talep Et
               </Link>
               <Link href="/#moduller" className="text-base font-semibold text-white/90 hover:text-white border border-white/20 hover:border-white/40 px-6 py-3.5 rounded-xl">
                 Modülleri keşfedin →
@@ -100,9 +100,8 @@ export default function Home() {
                     <div className="text-xl font-extrabold text-ink leading-tight">Puki {m.name}</div>
                   </div>
                 </div>
-                <div className="text-right">
-                  <div className="text-lg font-extrabold text-ink">{fmt(m.basePrice)}</div>
-                  <div className="text-[.7rem] text-muted">/ay · 1-5 kullanıcı</div>
+                <div className="text-right shrink-0">
+                  <span className="text-[.68rem] font-bold uppercase tracking-widest text-puki-dark bg-puki-light px-2.5 py-1 rounded-full">Teklife özel</span>
                 </div>
               </div>
               <p className="mt-4 text-[#5e6278] text-sm leading-relaxed">{m.blurb}</p>
@@ -127,9 +126,9 @@ export default function Home() {
           </div>
           <div className="mt-12 grid gap-6 md:grid-cols-3">
             {[
-              ["1", "Planınızı oluşturun", "Modülleri ve kullanıcı sayısını seçin, bölgenizi (TR/EU) belirleyin, fiyatı anında görün."],
-              ["2", "Ödeme & onay", "Güvenli ödemeyi yapın; hesabınız yetkili onayının ardından hazırlanır."],
-              ["3", "Giriş yapın, kullanın", "Giriş bilgileriniz e-posta ile gelir. Danışman beklemeden yönetim sisteminizi kurmaya başlayın."],
+              ["1", "Demo talep edin", "İlgilendiğiniz modülleri seçin, formu doldurun; ekibimiz sizinle iletişime geçsin."],
+              ["2", "Demo & teklif", "Size özel bir demo yapalım, ekip büyüklüğünüze ve modüllerinize göre net teklifimizi sunalım."],
+              ["3", "Hesabınız açılsın", "Anlaşınca hesabınızı hazırlarız; giriş bilgileriniz e-posta ile gelir, hemen kullanmaya başlarsınız."],
             ].map(([n, t, d]) => (
               <div key={n} className="relative bg-white border border-[#e7ebf1] rounded-xl3 shadow-card p-7">
                 <div className="w-11 h-11 rounded-xl2 bg-ink text-white grid place-items-center font-extrabold text-lg">{n}</div>
@@ -170,10 +169,10 @@ export default function Home() {
         <div className="hero-dark rounded-xl3 overflow-hidden relative">
           <div className="px-8 py-16 md:py-20 text-center relative z-10">
             <h2 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight">Yönetim sisteminizi bugün kurun</h2>
-            <p className="text-white/70 mt-3 max-w-xl mx-auto">Planınızı oluşturun, birkaç dakikada yayına alın. Kredi kartıyla hızlı kurulum, TR &amp; EU veri bölgesi.</p>
+            <p className="text-white/70 mt-3 max-w-xl mx-auto">Kısa bir demo planlayalım, kurumunuza özel teklifimizi sunalım. TR &amp; EU veri bölgesi seçeneğiyle.</p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-              <Link href="/fiyatlandirma" className="text-base font-bold text-ink bg-white hover:bg-puki hover:text-white transition-colors px-7 py-3.5 rounded-xl shadow-soft">
-                Planınızı oluşturun
+              <Link href="/demo" className="text-base font-bold text-ink bg-white hover:bg-puki hover:text-white transition-colors px-7 py-3.5 rounded-xl shadow-soft">
+                Demo Talep Et
               </Link>
               <Link href="/iletisim" className="text-base font-semibold text-white/90 hover:text-white border border-white/20 hover:border-white/40 px-7 py-3.5 rounded-xl">
                 Bize ulaşın

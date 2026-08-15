@@ -56,8 +56,8 @@ export default function IletisimPage() {
         <div className="mt-10 bg-puki-light border border-[#d7ead0] rounded-xl2 p-8 text-center">
           <h2 className="text-2xl font-extrabold text-ink">Kurumsal teklif mi lazım?</h2>
           <p className="text-[#5e6278] mt-2 max-w-2xl mx-auto">
-            10+ kullanıcı, QMS veya TISAX gibi kuruma özel modüller için size uygun bir teklif hazırlayalım.
-            Self-servis modüller için fiyatı hemen hesaplayabilirsiniz.
+            İhtiyacınıza göre ilgilendiğiniz modülleri birlikte belirleyelim, kısa bir demo yapalım
+            ve kurumunuza özel teklifimizi hazırlayalım.
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
             <a
@@ -66,8 +66,8 @@ export default function IletisimPage() {
             >
               Teklif talep edin
             </a>
-            <Link href="/fiyatlandirma" className="text-base font-semibold text-puki-dark hover:text-puki px-4 py-3">
-              Fiyatı hesaplayın →
+            <Link href="/demo" className="text-base font-semibold text-puki-dark hover:text-puki px-4 py-3">
+              Demo talep edin →
             </Link>
           </div>
         </div>

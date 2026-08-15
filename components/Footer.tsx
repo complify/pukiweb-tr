@@ -19,7 +19,7 @@ export default function Footer() {
             <li><Link href="/moduller/kvys" className="hover:text-puki-dark">Puki PIMS</Link></li>
             <li><Link href="/moduller/isys" className="hover:text-puki-dark">Puki İSYS</Link></li>
             <li><Link href="/moduller/yzys" className="hover:text-puki-dark">Puki YZYS</Link></li>
-            <li><a href="/fiyatlandirma" className="hover:text-puki-dark">Fiyatlandırma</a></li>
+            <li><Link href="/demo" className="hover:text-puki-dark">Demo talep et</Link></li>
           </ul>
         </div>
         <div>

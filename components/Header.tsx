@@ -46,7 +46,7 @@ export default function Header() {
           </div>
 
           <a href="/#neden" className="hover:text-puki-dark">Neden Puki</a>
-          <Link href="/fiyatlandirma" className="hover:text-puki-dark">Fiyatlandırma</Link>
+          <Link href="/demo" className="hover:text-puki-dark">Demo</Link>
           <Link href="/iletisim" className="hover:text-puki-dark">İletişim</Link>
         </nav>
 
@@ -54,8 +54,8 @@ export default function Header() {
           <a href="https://tr.pukisoft.com/login" className="hidden sm:inline text-sm font-semibold text-[#5e6278] hover:text-puki-dark">
             Giriş
           </a>
-          <Link href="/fiyatlandirma" className="text-sm font-bold text-white bg-puki hover:bg-puki-dark px-4 py-2 rounded-xl shadow-soft">
-            Hemen başla
+          <Link href="/demo" className="text-sm font-bold text-white bg-puki hover:bg-puki-dark px-4 py-2 rounded-xl shadow-soft">
+            Demo Talep Et
           </Link>
         </div>
       </div>
