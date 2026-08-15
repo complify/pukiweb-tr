@@ -8,11 +8,15 @@ import { getDict } from "@/lib/i18n";
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Hesabım — Puki", robots: { index: false } };
 
-const fmtDate = (ts?: number) => (ts ? new Date(ts).toLocaleString("tr-TR", { dateStyle: "medium", timeStyle: "short" }) : "—");
+const LOCALE: Record<string, string> = { tr: "tr-TR", az: "az-AZ", en: "en-GB" };
+const fmtDate = (ts: number | undefined, locale: string) =>
+  ts ? new Date(ts).toLocaleString(locale, { dateStyle: "medium", timeStyle: "short" }) : "—";
 
 export default async function HesapPage() {
-  const t = getDict(getLang());
+  const lang = getLang();
+  const t = getDict(lang);
   const p = t.portal;
+  const dloc = LOCALE[lang] || "en-GB";
   const session = await getCustomerSession();
   const email = session?.email || "";
   const orders = email ? await getOrdersByEmail(email) : [];
@@ -78,7 +82,7 @@ export default async function HesapPage() {
                   <div className="divide-y divide-[#f1f4f8]">
                     {payments.map((pmt, i) => (
                       <div key={i} className="flex items-center justify-between py-2 text-sm">
-                        <span className="text-[#5e6278]">{fmtDate(pmt.at)}</span>
+                        <span className="text-[#5e6278]">{fmtDate(pmt.at, dloc)}</span>
                         <span className="flex items-center gap-3">
                           <span className="font-semibold text-ink">{fmt(pmt.amount)}</span>
                           <span className={`text-[.66rem] font-bold px-2 py-0.5 rounded-full ${pmt.status === "success" ? "bg-puki-light text-puki-dark" : "bg-red-100 text-red-700"}`}>{pmt.status === "success" ? p.paySuccess : p.payFailure}</span>
@@ -89,7 +93,7 @@ export default async function HesapPage() {
                   </div>
                 ) : o.paidAt ? (
                   <div className="flex items-center justify-between py-2 text-sm">
-                    <span className="text-[#5e6278]">{fmtDate(o.paidAt)}</span>
+                    <span className="text-[#5e6278]">{fmtDate(o.paidAt, dloc)}</span>
                     <span className="flex items-center gap-3"><span className="font-semibold text-ink">{fmt(o.total)}</span><span className="text-[.66rem] font-bold px-2 py-0.5 rounded-full bg-puki-light text-puki-dark">{p.paySuccess}</span></span>
                   </div>
                 ) : (
