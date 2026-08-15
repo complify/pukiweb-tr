@@ -140,7 +140,7 @@ export default function Home() {
             ["⚡", "Dakikalar içinde kurulum", "Satın alın, hesabınız hazır olsun. Danışman beklemeden başlayın."],
             ["◎", "Tek platform, çok standart", "27001, KVKK/27701, 22301, 42001 aynı arayüzde — çapraz veri, tek gerçek."],
             ["⛨", "Veriniz sizin bölgenizde", "TR müşteri → Türkiye, EU müşteri → Avrupa. Data residency baştan çözülü."],
-            ["₺", "Küçük işletmeye göre fiyat", "1-5 kullanıcı standart, sonrası kullanıcı başı. Şeffaf, sürprizsiz fiyat."],
+            ["₺", "Küçük işletmeye uygun", "Yalnızca ihtiyacınız olan modüller için, kurumunuza özel şeffaf teklif."],
             ["↗", "Risk → aksiyon → kanıt", "Riskten düzeltici faaliyete, denetimden kanıta uçtan uca akış."],
             ["⤢", "Her an ölçeklenir", "Kullanıcı ekleyin, modül ekleyin — aboneliğiniz anında güncellensin."],
           ].map(([icon, t, d]) => (
