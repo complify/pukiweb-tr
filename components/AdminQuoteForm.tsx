@@ -1,28 +1,42 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { CATALOG, monthlyPrice, fmt, moduleByCode } from "@/lib/catalog";
 
 type Sel = Record<string, number>; // code -> fiyat (₺)
 
 export default function AdminQuoteForm() {
-  const [customer, setCustomer] = useState({
-    firstName: "", lastName: "", email: "", phone: "", company: "", taxId: "",
+  const sp = useSearchParams();
+  const [customer, setCustomer] = useState(() => {
+    const name = (sp.get("name") || "").trim();
+    const parts = name.split(/\s+/).filter(Boolean);
+    return {
+      firstName: sp.get("firstName") || parts[0] || "",
+      lastName: sp.get("lastName") || parts.slice(1).join(" ") || "",
+      email: sp.get("email") || "",
+      phone: sp.get("phone") || "",
+      company: sp.get("company") || "",
+      taxId: "",
+    };
   });
   const [region, setRegion] = useState<"tr" | "eu">("tr");
-  const [billing, setBilling] = useState<"monthly" | "annual">("monthly");
+  const [offerAnnual, setOfferAnnual] = useState(true);
   const [seats, setSeats] = useState(5);
-  const [sel, setSel] = useState<Sel>({});
+  const [sel, setSel] = useState<Sel>(() => {
+    const codes = (sp.get("modules") || "").split(",").map((x) => x.trim()).filter(Boolean);
+    const init: Sel = {};
+    for (const code of codes) { if (moduleByCode(code)) init[code] = monthlyPrice([code], 5); }
+    return init;
+  });
   const [note, setNote] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [done, setDone] = useState<{ ref: string; link: string; emailed: boolean } | null>(null);
   const [copied, setCopied] = useState(false);
 
-  const suggested = (code: string) => {
-    const monthly = monthlyPrice([code], seats);
-    return billing === "annual" ? monthly * CATALOG.annualMonths : monthly;
-  };
+  const annualMonths = CATALOG.annualMonths;
+  const suggested = (code: string) => monthlyPrice([code], seats);
 
   const toggle = (code: string) =>
     setSel((cur) => {
@@ -55,7 +69,7 @@ export default function AdminQuoteForm() {
       const lineItems = Object.entries(sel).map(([code, price]) => ({ code, price: Number(price) || 0 }));
       const r = await fetch("/api/admin/quotes", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ customer, region, billing, seats, lineItems, note }),
+        body: JSON.stringify({ customer, region, seats, offerAnnual, lineItems, note }),
       });
       const d = await r.json();
       if (!r.ok) throw new Error(d.error || "Teklif oluşturulamadı.");
@@ -118,14 +132,17 @@ export default function AdminQuoteForm() {
             <div className="font-bold text-ink">Modüller & fiyat</div>
             <button type="button" onClick={recalc} className="text-xs font-bold text-puki-dark hover:text-puki">↻ Fiyatları yeniden hesapla</button>
           </div>
-          <div className="grid sm:grid-cols-3 gap-3 mb-4">
+          <div className="grid sm:grid-cols-2 gap-3 mb-3">
             <label className="block"><span className="text-xs font-semibold text-muted uppercase tracking-wide">Bölge</span>
               <select value={region} onChange={(e) => setRegion(e.target.value as any)} className={inp}><option value="tr">Türkiye</option><option value="eu">Avrupa</option></select></label>
-            <label className="block"><span className="text-xs font-semibold text-muted uppercase tracking-wide">Dönem</span>
-              <select value={billing} onChange={(e) => setBilling(e.target.value as any)} className={inp}><option value="monthly">Aylık</option><option value="annual">Yıllık (10 ay)</option></select></label>
             <label className="block"><span className="text-xs font-semibold text-muted uppercase tracking-wide">Kullanıcı</span>
               <input type="number" min={1} value={seats} onChange={(e) => setSeats(Math.max(1, Number(e.target.value) || 1))} className={inp} /></label>
           </div>
+          <label className="flex items-center gap-2 mb-4 cursor-pointer select-none">
+            <input type="checkbox" checked={offerAnnual} onChange={(e) => setOfferAnnual(e.target.checked)} className="w-4 h-4 accent-puki" />
+            <span className="text-sm font-semibold text-ink">Yıllık ödeme seçeneği de sun <span className="text-muted font-normal">(müşteri aylık/yıllık seçer · 2 ay bedava)</span></span>
+          </label>
+          <div className="text-xs text-muted mb-3">Fiyatları <b>aylık birim</b> olarak girin; yıllık tutar otomatik hesaplanır.</div>
           <div className="space-y-2">
             {CATALOG.modules.map((m) => {
               const on = m.code in sel;
@@ -144,10 +161,10 @@ export default function AdminQuoteForm() {
                       <input type="number" min={0} value={sel[m.code]}
                         onChange={(e) => setSel((c) => ({ ...c, [m.code]: Math.max(0, Number(e.target.value) || 0) }))}
                         className="w-28 rounded-lg border border-[#e3e7ee] px-2.5 py-1.5 text-right text-ink focus:border-puki outline-none" />
-                      <span className="text-sm text-muted">₺</span>
+                      <span className="text-sm text-muted">₺/ay</span>
                     </div>
                   ) : (
-                    <span className="text-xs text-muted shrink-0">≈ {fmt(suggested(m.code))}</span>
+                    <span className="text-xs text-muted shrink-0">≈ {fmt(suggested(m.code))}/ay</span>
                   )}
                 </div>
               );
@@ -175,10 +192,16 @@ export default function AdminQuoteForm() {
             ))}
           </div>
           <div className="flex items-center justify-between mt-4 pt-4 border-t-2 border-ink">
-            <span className="font-extrabold text-ink">Toplam</span>
-            <span className="text-xl font-extrabold text-puki-dark">{fmt(total)}</span>
+            <span className="font-extrabold text-ink">Aylık toplam</span>
+            <span className="text-xl font-extrabold text-puki-dark">{fmt(total)}<span className="text-sm text-muted font-semibold">/ay</span></span>
           </div>
-          <div className="text-xs text-muted mt-1 text-right">{billing === "annual" ? "yıllık" : "aylık"} · {seats} kullanıcı · {region.toUpperCase()}</div>
+          {offerAnnual && (
+            <div className="flex items-center justify-between mt-1">
+              <span className="text-sm font-semibold text-[#5e6278]">Yıllık <span className="text-muted font-normal">(2 ay bedava)</span></span>
+              <span className="text-sm font-bold text-ink">{fmt(total * annualMonths)}<span className="text-xs text-muted font-semibold">/yıl</span></span>
+            </div>
+          )}
+          <div className="text-xs text-muted mt-2 text-right">{seats} kullanıcı · {region.toUpperCase()} · fatura bilgisi ödemede alınır</div>
 
           {err && <div className="mt-4 text-sm text-red-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2">{err}</div>}
 

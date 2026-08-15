@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import AdminQuoteForm from "@/components/AdminQuoteForm";
 import AdminBar from "@/components/AdminBar";
 import { getSession } from "@/lib/session-server";
@@ -12,9 +13,11 @@ export default async function AdminQuotePage() {
       {session && <AdminBar session={session} active="quote" />}
       <div className="mb-6">
         <h1 className="text-2xl font-extrabold text-ink tracking-tight">Yeni teklif & ödeme linki</h1>
-        <p className="text-muted mt-1 text-sm">Müşteri ve modülleri seçin, fiyatı düzenleyin; sistem ödeme linkini oluşturup müşteriye e-posta ile gönderir. Ödeme alınınca sipariş onay kuyruğuna düşer.</p>
+        <p className="text-muted mt-1 text-sm">Müşteri ve modülleri seçin, aylık fiyatları düzenleyin; sistem ödeme linkini oluşturup müşteriye e-posta ile gönderir. Dönem (aylık/yıllık) ve fatura bilgisini müşteri ödeme ekranında girer.</p>
       </div>
-      <AdminQuoteForm />
+      <Suspense fallback={<div className="text-muted">Yükleniyor…</div>}>
+        <AdminQuoteForm />
+      </Suspense>
     </div>
   );
 }

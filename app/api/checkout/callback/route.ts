@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
     const ok = result.status === "success" && result.paymentStatus === "SUCCESS";
 
     if (ok) {
-      const updated = await setOrderStatus(ref, "paid_awaiting_approval", { iyzicoPaymentId: result.paymentId });
+      const updated = await setOrderStatus(ref, "paid_awaiting_approval", { iyzicoPaymentId: result.paymentId, paidAt: Date.now() });
       // Sipariş init'te kaydedilmemişse (ör. KV yeni bağlandıysa) minimum kayıt oluştur.
       if (!updated && ref) {
         await saveOrder({

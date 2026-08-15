@@ -31,7 +31,19 @@ export interface Order {
   note?: string;
   // --- Admin tarafından oluşturulan teklifler (Faz B) ---
   origin?: "self" | "admin";        // "admin" = panelden oluşturulan teklif/ödeme linki
-  lineItems?: { code: string; name: string; price: number }[]; // teklif kalemleri (tahsil edilen)
+  lineItems?: { code: string; name: string; price: number }[]; // teklif kalemleri (AYLIK birim fiyat)
+  // Müşteriye sunulan ödeme seçenekleri (aylık/yıllık) — fiyatlar aylık baz üzerinden
+  pricing?: { monthlyTotal: number; offerAnnual: boolean; annualMonths: number };
+  // Ödeme anında müşteriden alınan fatura bilgileri
+  invoice?: {
+    type: "individual" | "corporate";
+    title: string;       // ünvan (kurumsal) / ad soyad (bireysel)
+    taxId: string;       // VKN / TCKN
+    taxOffice?: string;  // vergi dairesi (kurumsal)
+    address: string;
+    city: string;
+  };
+  paidAt?: number;       // ödemenin alındığı an (callback)
 }
 
 // --- Upstash bağlantısı (env varsa) ---
