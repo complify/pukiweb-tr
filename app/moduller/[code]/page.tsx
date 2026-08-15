@@ -3,6 +3,9 @@ import { notFound } from "next/navigation";
 import { MODULE_DETAILS, allModuleCodes, moduleDetail } from "@/lib/module-content";
 import ModuleIcon from "@/components/ModuleIcon";
 import ModuleVisual from "@/components/ModuleVisual";
+import { getLang } from "@/lib/lang-server";
+
+export const dynamic = "force-dynamic";
 
 export function generateStaticParams() {
   return allModuleCodes().map((code) => ({ code }));
@@ -11,9 +14,10 @@ export function generateStaticParams() {
 export function generateMetadata({ params }: { params: { code: string } }) {
   const d = moduleDetail(params.code);
   if (!d) return { title: "Modül — Puki" };
+  const lang = getLang();
   return {
     title: `Puki ${d.name} (${d.iso}) — Puki`,
-    description: `${d.tagline}. ${d.overview[0]}`,
+    description: `${d.tagline[lang]}. ${d.overview[0]}`,
   };
 }
 
@@ -28,6 +32,7 @@ const FLOW = [
 export default function ModulePage({ params }: { params: { code: string } }) {
   const d = moduleDetail(params.code);
   if (!d) notFound();
+  const lang = getLang();
 
   const others = Object.values(MODULE_DETAILS).filter((m) => m.code !== d.code);
 
@@ -49,7 +54,7 @@ export default function ModulePage({ params }: { params: { code: string } }) {
                 <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight leading-tight">Puki {d.name}</h1>
               </div>
             </div>
-            <p className="mt-5 max-w-xl text-lg text-white/70 leading-relaxed">{d.tagline}</p>
+            <p className="mt-5 max-w-xl text-lg text-white/70 leading-relaxed">{d.tagline[lang]}</p>
             <p className="mt-3 max-w-xl text-white/55 leading-relaxed">{d.overview[0]}</p>
 
             <div className="mt-8 flex flex-wrap items-center gap-4">

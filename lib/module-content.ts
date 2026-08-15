@@ -1,3 +1,5 @@
+import type { Lang } from "@/lib/i18n";
+
 // Modül detay içerikleri — /moduller/[code] sayfalarında kullanılır.
 // Katalog (lib/catalog.ts) fiyat & kodları tutar; burada anlatım & özellikler.
 
@@ -10,7 +12,7 @@ export interface ModuleDetail {
   code: string;          // katalog kodu (bgys|kvys|isys|yzys) veya salt-tanıtım (qms|tisax)
   name: string;
   iso: string;
-  tagline: string;
+  tagline: Record<Lang, string>;
   overview: string[];    // paragraflar
   features: ModuleFeature[];
   audience: string;      // kimler için
@@ -24,7 +26,7 @@ export const MODULE_DETAILS: Record<string, ModuleDetail> = {
     code: "bgys",
     name: "ISMS",
     iso: "ISO/IEC 27001",
-    tagline: "Bilgi Güvenliği Yönetim Sistemi (ISMS)",
+    tagline: { tr: "Bilgi Güvenliği Yönetim Sistemi (ISMS)", az: "İnformasiya Təhlükəsizliyi İdarəetmə Sistemi (ISMS)", en: "Information Security Management System (ISMS)" },
     overview: [
       "BGYS modülü, kurumunuzun bilgi varlıklarını risk temelli bir yaklaşımla korumanızı sağlar. Varlıklarınızı envanterler, risklerinizi değerlendirir ve ISO/IEC 27001 Annex A kontrollerini uçtan uca yönetirsiniz.",
       "Belge, politika, olay ve iyileştirme akışları tek platformda birleşir; iç denetim ve yönetimin gözden geçirmesi için gereken kanıtı otomatik biriktirirsiniz. Sertifikasyon denetimine hazır bir sistemle çalışırsınız.",
@@ -45,7 +47,7 @@ export const MODULE_DETAILS: Record<string, ModuleDetail> = {
     code: "kvys",
     name: "PIMS",
     iso: "KVKK & ISO/IEC 27701",
-    tagline: "Kişisel Veri Yönetim Sistemi (PIMS)",
+    tagline: { tr: "Kişisel Veri Yönetim Sistemi (PIMS)", az: "Şəxsi Məlumatların İdarəetmə Sistemi (PIMS)", en: "Privacy Information Management System (PIMS)" },
     overview: [
       "KVYS modülü, KVKK yükümlülüklerinizi ve ISO/IEC 27701 (PIMS) gereksinimlerini tek çatı altında yönetmenizi sağlar. Kişisel veri işleme faaliyetlerinizi envanterler, hukuki dayanaklarını ve saklama sürelerini kayıt altına alırsınız.",
       "İlgili kişi başvurularından veri ihlali bildirimine, aydınlatma ve rıza yönetiminden imha süreçlerine kadar tüm KVKK akışını dijitalleştirir; VERBİS ve denetimler için gereken kanıtı hazır tutarsınız.",
@@ -66,7 +68,7 @@ export const MODULE_DETAILS: Record<string, ModuleDetail> = {
     code: "isys",
     name: "İSYS",
     iso: "ISO 22301",
-    tagline: "İş Sürekliliği Yönetim Sistemi",
+    tagline: { tr: "İş Sürekliliği Yönetim Sistemi", az: "Biznesin Fasiləsizliyi İdarəetmə Sistemi", en: "Business Continuity Management System" },
     overview: [
       "İSYS modülü, kritik iş süreçlerinizi kesintilere karşı dayanıklı hale getirir. İş etki analizi (BIA) ile kritik süreçlerinizi, kurtarma hedeflerinizi (RTO/RPO) ve bağımlılıklarınızı belirlersiniz.",
       "İş sürekliliği planlarını (BCP) oluşturur, tatbikatlarla test eder ve olay/kriz anında devreye alacağınız hazır adımlarla çalışırsınız. ISO 22301 denetimine hazır kanıt seti otomatik oluşur.",
@@ -87,7 +89,7 @@ export const MODULE_DETAILS: Record<string, ModuleDetail> = {
     code: "yzys",
     name: "YZYS",
     iso: "ISO/IEC 42001",
-    tagline: "Yapay Zekâ Yönetim Sistemi",
+    tagline: { tr: "Yapay Zekâ Yönetim Sistemi", az: "Süni İntellekt İdarəetmə Sistemi", en: "Artificial Intelligence Management System" },
     overview: [
       "YZYS modülü, yapay zekâ sistemlerinizi sorumlu ve şeffaf biçimde yönetmenizi sağlar. Kullandığınız YZ sistemlerini envanterler, etki değerlendirmesi yapar ve riskleri kontrol altına alırsınız.",
       "ISO/IEC 42001 gereksinimleri doğrultusunda yaşam döngüsü, tedarikçi ve hesap verebilirlik kontrollerini yönetir; YZ yönetişimini denetlenebilir bir sisteme dönüştürürsünüz.",
@@ -108,7 +110,7 @@ export const MODULE_DETAILS: Record<string, ModuleDetail> = {
     code: "qms",
     name: "QMS",
     iso: "ISO 9001",
-    tagline: "Kalite Yönetim Sistemi (QMS)",
+    tagline: { tr: "Kalite Yönetim Sistemi (QMS)", az: "Keyfiyyət İdarəetmə Sistemi (QMS)", en: "Quality Management System (QMS)" },
     quoteOnly: true,
     overview: [
       "QMS modülü, kalite yönetim sisteminizi ISO 9001 doğrultusunda uçtan uca yönetmenizi sağlar. Süreçlerinizi, hedeflerinizi ve müşteri memnuniyeti göstergelerinizi tek platformda izlersiniz.",
@@ -130,7 +132,7 @@ export const MODULE_DETAILS: Record<string, ModuleDetail> = {
     code: "tisax",
     name: "TISAX",
     iso: "TISAX · VDA ISA",
-    tagline: "Otomotiv Bilgi Güvenliği Değerlendirmesi (TISAX)",
+    tagline: { tr: "Otomotiv Bilgi Güvenliği Değerlendirmesi (TISAX)", az: "Avtomobil İnformasiya Təhlükəsizliyi Qiymətləndirməsi (TISAX)", en: "Automotive Information Security Assessment (TISAX)" },
     quoteOnly: true,
     overview: [
       "TISAX modülü, otomotiv tedarik zincirinde talep edilen TISAX (VDA ISA) değerlendirmesine hazırlanmanızı sağlar. VDA ISA kontrol kataloğunu, olgunluk seviyelerini ve boşluk analizini yapılandırılmış biçimde yönetirsiniz.",
@@ -152,7 +154,7 @@ export const MODULE_DETAILS: Record<string, ModuleDetail> = {
     code: "soc2",
     name: "SOC 2",
     iso: "AICPA TSC",
-    tagline: "SOC 2 Güven Hizmetleri Uyumu",
+    tagline: { tr: "SOC 2 Güven Hizmetleri Uyumu", az: "SOC 2 Etibar Xidmətləri Uyğunluğu", en: "SOC 2 Trust Services Compliance" },
     quoteOnly: true,
     overview: [
       "SOC 2 modülü, AICPA Güven Hizmetleri Kriterleri (TSC) doğrultusunda denetime hazırlanmanızı sağlar. Güvenlik, erişilebilirlik, işlem bütünlüğü, gizlilik ve mahremiyet kriterlerini tek platformda yönetirsiniz.",
@@ -174,7 +176,7 @@ export const MODULE_DETAILS: Record<string, ModuleDetail> = {
     code: "itsm",
     name: "ITSM",
     iso: "ISO/IEC 20000-1",
-    tagline: "BT Hizmet Yönetim Sistemi (ITSM)",
+    tagline: { tr: "BT Hizmet Yönetim Sistemi (ITSM)", az: "İT Xidmət İdarəetmə Sistemi (ITSM)", en: "IT Service Management System (ITSM)" },
     quoteOnly: true,
     overview: [
       "ITSM modülü, BT hizmet yönetim sisteminizi ISO/IEC 20000-1 doğrultusunda yönetmenizi sağlar. Hizmet kataloğu, seviye anlaşmaları (SLA) ve hizmet süreçlerini tek platformda yürütürsünüz.",
@@ -196,7 +198,7 @@ export const MODULE_DETAILS: Record<string, ModuleDetail> = {
     code: "spice",
     name: "SPICE",
     iso: "ISO/IEC 33000 · ASPICE",
-    tagline: "Süreç Olgunluğu Değerlendirmesi (SPICE)",
+    tagline: { tr: "Süreç Olgunluğu Değerlendirmesi (SPICE)", az: "Proses Yetkinliyi Qiymətləndirməsi (SPICE)", en: "Process Maturity Assessment (SPICE)" },
     quoteOnly: true,
     overview: [
       "SPICE modülü, yazılım ve sistem süreçlerinizi ISO/IEC 33000 ve Automotive SPICE (ASPICE) çerçevesinde değerlendirmenizi sağlar. Süreçleri, yetenek seviyelerini ve boşluk analizini yapılandırılmış biçimde yönetirsiniz.",
@@ -218,7 +220,7 @@ export const MODULE_DETAILS: Record<string, ModuleDetail> = {
     code: "egitim",
     name: "Akademi",
     iso: "Eğitim & Farkındalık",
-    tagline: "Eğitim ve Farkındalık Yönetimi",
+    tagline: { tr: "Eğitim ve Farkındalık Yönetimi", az: "Təlim və Məlumatlılıq İdarəetməsi", en: "Training & Awareness Management" },
     quoteOnly: true,
     overview: [
       "Akademi modülü, personel eğitim ve farkındalık süreçlerinizi Puki ile bütünleşik yönetmenizi sağlar. Complify Academy eğitim kataloğundan personelinize eğitim atar, tamamlanma ve sertifikaları tek yerden takip edersiniz.",
