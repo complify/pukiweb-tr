@@ -180,6 +180,33 @@ export default function AdminOrders({ initial, kvEnabled }: { initial: Order[]; 
                     {kv("Hesap açılışı", o.provision?.at ? fmtDate(o.provision.at) : "—")}
                     {o.note ? kv("Not", o.note) : null}
                   </div>
+
+                  {(o.subscription?.subscriptionRef || (o.payments && o.payments.length > 0)) && (
+                    <div className="md:col-span-2 rounded-xl border border-[#eef1f6] p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="text-xs font-bold text-ink">Abonelik & ödeme geçmişi</div>
+                        {o.subscription?.status && (
+                          <span className="text-[.62rem] font-bold px-2 py-0.5 rounded-full bg-puki-light text-puki-dark">{o.subscription.status}{o.subscription.interval ? ` · ${o.subscription.interval === "annual" ? "Yıllık" : "Aylık"}` : ""}</span>
+                        )}
+                      </div>
+                      {o.subscription?.subscriptionRef && <div className="text-[.7rem] text-muted mb-2">Abonelik no: {o.subscription.subscriptionRef}</div>}
+                      {o.payments && o.payments.length > 0 ? (
+                        <div className="divide-y divide-[#f1f4f8]">
+                          {o.payments.slice().sort((a, b) => b.at - a.at).map((pmt, i) => (
+                            <div key={i} className="flex items-center justify-between py-1.5 text-xs">
+                              <span className="text-[#5e6278]">{fmtDate(pmt.at)}</span>
+                              <span className="flex items-center gap-2">
+                                <span className="font-semibold text-ink">{fmt(pmt.amount)}</span>
+                                <span className={`font-bold px-2 py-0.5 rounded-full ${pmt.status === "success" ? "bg-puki-light text-puki-dark" : "bg-red-100 text-red-700"}`}>{pmt.status === "success" ? "Başarılı" : "Başarısız"}</span>
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="text-xs text-muted">Henüz tahsilat kaydı yok — her dönem tahsilatı iyzico webhook'u ile buraya düşer.</div>
+                      )}
+                    </div>
+                  )}
                 </div>
               )}
 

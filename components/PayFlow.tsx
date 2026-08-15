@@ -1,9 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { fmt } from "@/lib/catalog";
-
-type Line = { code: string; name: string; price: number };
 
 export default function PayFlow({
   refCode, monthlyTotal, annualMonths, offerAnnual, company,
@@ -17,19 +15,32 @@ export default function PayFlow({
   const [billing, setBilling] = useState<"monthly" | "annual">("monthly");
   const [inv, setInv] = useState({
     type: "corporate" as "corporate" | "individual",
-    title: company,
-    taxId: "",
-    taxOffice: "",
-    address: "",
-    city: "",
+    title: company, taxId: "", taxOffice: "", address: "", city: "",
   });
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const [embed, setEmbed] = useState<string | null>(null);
 
   const total = billing === "annual" ? monthlyTotal * annualMonths : monthlyTotal;
   const setF = (k: keyof typeof inv) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setInv((s) => ({ ...s, [k]: e.target.value }));
   const inp = "mt-1.5 w-full rounded-xl border border-[#e3e7ee] px-3.5 py-2.5 text-ink focus:border-puki focus:ring-2 focus:ring-puki/20 outline-none";
+
+  // iyzico embed (checkoutFormContent) script'lerini çalıştır
+  useEffect(() => {
+    if (!embed) return;
+    const holder = document.createElement("div");
+    holder.innerHTML = embed;
+    const appended: HTMLScriptElement[] = [];
+    holder.querySelectorAll("script").forEach((old) => {
+      const s = document.createElement("script");
+      if (old.src) s.src = old.src; else s.text = old.textContent || "";
+      s.async = false;
+      document.body.appendChild(s);
+      appended.push(s);
+    });
+    return () => { appended.forEach((s) => s.remove()); };
+  }, [embed]);
 
   const pay = async () => {
     setErr(null);
@@ -41,17 +52,31 @@ export default function PayFlow({
     }
     setBusy(true);
     try {
-      const r = await fetch("/api/checkout/init-by-ref", {
+      const r = await fetch("/api/checkout/subscription-init", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ref: refCode, billing, invoice: inv }),
       });
       const d = await r.json();
-      if (!r.ok || !d.paymentPageUrl) throw new Error(d.error || "Ödeme başlatılamadı.");
-      window.location.href = d.paymentPageUrl;
+      if (!r.ok || !d.checkoutFormContent) throw new Error(d.error || "Ödeme başlatılamadı.");
+      setEmbed(d.checkoutFormContent);
     } catch (e: any) {
       setErr(e.message); setBusy(false);
     }
   };
+
+  // Ödeme ekranı (iyzico embed)
+  if (embed) {
+    return (
+      <div className="mt-6">
+        <div className="flex items-center justify-between mb-3">
+          <div className="text-sm font-bold text-ink">Kart bilgileri</div>
+          <div className="text-sm font-semibold text-puki-dark">{fmt(total)}<span className="text-xs text-muted">{billing === "annual" ? "/yıl" : "/ay"}</span></div>
+        </div>
+        <div id="iyzipay-checkout-form" className="responsive" />
+        <p className="text-xs text-muted mt-3 text-center">iyzico ile güvenli ödeme · {billing === "annual" ? "yıllık" : "aylık"} otomatik yenilenir, istediğiniz zaman iptal edebilirsiniz.</p>
+      </div>
+    );
+  }
 
   const optCard = (val: "monthly" | "annual", title: string, amount: number, sub: string, note?: string) => {
     const on = billing === val;
@@ -70,23 +95,21 @@ export default function PayFlow({
 
   return (
     <div className="mt-6">
-      {/* Ödeme dönemi */}
       {offerAnnual ? (
         <>
           <div className="text-sm font-bold text-ink mb-2">Ödeme dönemi</div>
           <div className="flex gap-3">
-            {optCard("monthly", "Aylık", monthlyTotal, "/ay")}
+            {optCard("monthly", "Aylık", monthlyTotal, "/ay", "otomatik yenilenir")}
             {optCard("annual", "Yıllık", monthlyTotal * annualMonths, "/yıl", "2 ay bedava")}
           </div>
         </>
       ) : (
         <div className="flex items-center justify-between rounded-xl2 border border-[#e7ebf1] px-4 py-3">
-          <span className="text-sm font-semibold text-[#5e6278]">Aylık ödeme</span>
+          <span className="text-sm font-semibold text-[#5e6278]">Aylık abonelik</span>
           <span className="text-lg font-extrabold text-ink">{fmt(monthlyTotal)}<span className="text-xs text-muted">/ay</span></span>
         </div>
       )}
 
-      {/* Fatura bilgileri */}
       <div className="mt-6">
         <div className="text-sm font-bold text-ink mb-3">Fatura bilgileri</div>
         <div className="flex gap-2 mb-3">
@@ -113,9 +136,8 @@ export default function PayFlow({
         </div>
       </div>
 
-      {/* Toplam + öde */}
       <div className="mt-6 flex items-center justify-between rounded-xl2 bg-[#f9fbf5] border border-[#e7ebf1] px-4 py-3">
-        <span className="font-bold text-ink">Ödenecek tutar</span>
+        <span className="font-bold text-ink">İlk tahsilat</span>
         <span className="text-2xl font-extrabold text-puki-dark">{fmt(total)}<span className="text-sm text-muted font-semibold">{billing === "annual" ? "/yıl" : "/ay"}</span></span>
       </div>
 
@@ -123,9 +145,9 @@ export default function PayFlow({
 
       <button onClick={pay} disabled={busy}
         className="mt-4 w-full text-base font-bold text-white bg-puki hover:bg-puki-dark px-6 py-3.5 rounded-xl shadow-soft disabled:opacity-50">
-        {busy ? "Ödeme sayfasına yönlendiriliyor…" : "Güvenli ödeme yap"}
+        {busy ? "Hazırlanıyor…" : "Aboneliği başlat & öde"}
       </button>
-      <p className="text-xs text-muted mt-3 text-center">iyzico ile güvenli ödeme. Kart bilgileriniz Puki'de saklanmaz.</p>
+      <p className="text-xs text-muted mt-3 text-center">{billing === "annual" ? "Yıllık" : "Aylık"} otomatik yenilenir · istediğiniz zaman iptal edebilirsiniz · iyzico güvencesiyle.</p>
     </div>
   );
 }
