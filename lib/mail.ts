@@ -12,7 +12,7 @@ export const mailEnabled = !!process.env.RESEND_API_KEY;
 
 export async function sendMail(m: MailInput): Promise<boolean> {
   const key = process.env.RESEND_API_KEY;
-  const from = process.env.MAIL_FROM || "Puki <onboarding@resend.dev>";
+  const from = process.env.MAIL_FROM || "Puki <hello@complify.io>";
   if (!key) {
     console.warn("[mail] RESEND_API_KEY yok — e-posta gönderimi atlandı.");
     return false;

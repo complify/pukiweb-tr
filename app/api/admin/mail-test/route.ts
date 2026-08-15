@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 // Admin girişi arkasında (middleware korur). Tarayıcıda /api/admin/mail-test açılınca test maili gönderir.
 export async function GET() {
   const to = notifyTo();
-  const from = process.env.MAIL_FROM || "Puki <onboarding@resend.dev>";
+  const from = process.env.MAIL_FROM || "Puki <hello@complify.io>";
   const hasKey = !!process.env.RESEND_API_KEY;
 
   if (!hasKey) {
