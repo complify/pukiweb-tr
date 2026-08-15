@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { MODULE_DETAILS, allModuleCodes, moduleDetail } from "@/lib/module-content";
+import { MODULE_DETAILS, allModuleCodes, localizedModule } from "@/lib/module-content";
 import ModuleIcon from "@/components/ModuleIcon";
 import ModuleVisual from "@/components/ModuleVisual";
 import { getLang } from "@/lib/lang-server";
@@ -13,19 +13,19 @@ export function generateStaticParams() {
 }
 
 export function generateMetadata({ params }: { params: { code: string } }) {
-  const d = moduleDetail(params.code);
-  if (!d) return { title: "Modül — Puki" };
   const lang = getLang();
+  const d = localizedModule(params.code, lang);
+  if (!d) return { title: "Modül — Puki" };
   return {
     title: `Puki ${d.name} (${d.iso}) — Puki`,
-    description: `${d.tagline[lang]}. ${d.overview[0]}`,
+    description: `${d.tagline}. ${d.overview[0]}`,
   };
 }
 
 export default function ModulePage({ params }: { params: { code: string } }) {
-  const d = moduleDetail(params.code);
-  if (!d) notFound();
   const lang = getLang();
+  const d = localizedModule(params.code, lang);
+  if (!d) notFound();
   const M = getDict(lang).modulePage;
   const nm = `Puki ${d.name}`;
   const FLOW: [string, string][] = [[M.f1t, M.f1d], [M.f2t, M.f2d], [M.f3t, M.f3d], [M.f4t, M.f4d]];
@@ -50,7 +50,7 @@ export default function ModulePage({ params }: { params: { code: string } }) {
                 <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight leading-tight">Puki {d.name}</h1>
               </div>
             </div>
-            <p className="mt-5 max-w-xl text-lg text-white/70 leading-relaxed">{d.tagline[lang]}</p>
+            <p className="mt-5 max-w-xl text-lg text-white/70 leading-relaxed">{d.tagline}</p>
             <p className="mt-3 max-w-xl text-white/55 leading-relaxed">{d.overview[0]}</p>
 
             <div className="mt-8 flex flex-wrap items-center gap-4">
@@ -62,7 +62,7 @@ export default function ModulePage({ params }: { params: { code: string } }) {
           </div>
 
           <div className="lg:pl-6">
-            <ModuleVisual detail={d} />
+            <ModuleVisual detail={d} lang={lang} />
           </div>
         </div>
       </section>

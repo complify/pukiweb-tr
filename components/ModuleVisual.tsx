@@ -1,5 +1,10 @@
 import ModuleIcon from "@/components/ModuleIcon";
-import type { ModuleDetail } from "@/lib/module-content";
+import type { Lang } from "@/lib/i18n";
+
+const VIS = {
+  ready: { tr: "Hazırlık", az: "Hazırlıq", en: "Readiness" },
+  evidence: { tr: "Oluşan kanıtlar", az: "Yaranan sübutlar", en: "Evidence generated" },
+} as const;
 
 // Modül başına sabit (deterministik) örnek metrikler — demo görseli.
 const STATS: Record<string, { ready: number; a: [string, string]; b: [string, string] }> = {
@@ -15,7 +20,7 @@ const STATS: Record<string, { ready: number; a: [string, string]; b: [string, st
   egitim: { ready: 81, a: ["12", "atanan eğitim"], b: ["37", "sertifika"] },
 };
 
-export default function ModuleVisual({ detail }: { detail: ModuleDetail }) {
+export default function ModuleVisual({ detail, lang = "tr" }: { detail: { code: string; name: string; iso: string; outcomes: string[] }; lang?: Lang }) {
   const s = STATS[detail.code] ?? { ready: 72, a: ["—", "kontrol"], b: ["—", "aksiyon"] };
   const ring = 97.4;
   const offset = ring * (1 - s.ready / 100);
@@ -43,7 +48,7 @@ export default function ModuleVisual({ detail }: { detail: ModuleDetail }) {
                 </svg>
                 <div className="absolute inset-0 grid place-items-center text-sm font-extrabold text-ink">%{s.ready}</div>
               </div>
-              <div className="text-[.58rem] font-bold text-muted mt-2 uppercase tracking-wider text-center">Hazırlık</div>
+              <div className="text-[.58rem] font-bold text-muted mt-2 uppercase tracking-wider text-center">{VIS.ready[lang]}</div>
             </div>
 
             {/* stat tile'ları */}
@@ -64,7 +69,7 @@ export default function ModuleVisual({ detail }: { detail: ModuleDetail }) {
 
           {/* çıktı checklist */}
           <div className="mt-3 rounded-xl border border-[#eef1f6] p-3">
-            <div className="text-[.62rem] font-bold text-ink mb-2">Oluşan kanıtlar</div>
+            <div className="text-[.62rem] font-bold text-ink mb-2">{VIS.evidence[lang]}</div>
             <div className="space-y-2">
               {detail.outcomes.slice(0, 4).map((o) => (
                 <div key={o} className="flex items-center gap-2">
