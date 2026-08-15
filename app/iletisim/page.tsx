@@ -27,7 +27,7 @@ export default function IletisimPage() {
             <div className="w-10 h-10 rounded-xl bg-puki-light flex items-center justify-center text-puki-dark font-black">⌂</div>
             <div className="font-bold text-ink mt-3">{c.addressLabel}</div>
             <address className="not-italic text-sm text-[#5e6278] mt-2 leading-relaxed">
-              Puki Yazılım Teknoloji A.Ş.<br />Ulutek Teknoloji Geliştirme Bölgesi<br />Uludağ Üniversitesi, Görükle Mah.<br />Üniversite-1 Cad. No:933<br />16059, Nilüfer / BURSA
+              Puki Yazılım Teknoloji A.Ş.<br />Ulutek Teknoloji Geliştirme Bölgesi<br />Uludağ Üniversitesi, Görükle Mah.<br />Üniversite-1 Cad. No:933<br />16059, Nilüfer / BURSA<br />Türkiye
             </address>
           </div>
           <div className="bg-white border border-[#e7ebf1] rounded-xl2 shadow-card p-6">

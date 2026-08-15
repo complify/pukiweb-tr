@@ -39,7 +39,7 @@ export default function Footer({ lang }: { lang: Lang }) {
         <div>
           <div className="font-bold text-ink mb-3">{d.contact}</div>
           <address className="not-italic space-y-2 text-[#5e6278] leading-relaxed">
-            <div>Puki Yazılım Teknoloji A.Ş.<br />Ulutek TGB, Görükle Mah.<br />Üniversite-1 Cad. No:933<br />16059, Nilüfer / BURSA</div>
+            <div>Puki Yazılım Teknoloji A.Ş.<br />Ulutek TGB, Görükle Mah.<br />Üniversite-1 Cad. No:933<br />16059, Nilüfer / BURSA<br />Türkiye</div>
             <div><a href="tel:+902243230443" className="hover:text-puki-dark">+90 224 323 0 443</a></div>
             <div><a href="mailto:destek@puki.com.tr" className="hover:text-puki-dark">destek@puki.com.tr</a></div>
           </address>
