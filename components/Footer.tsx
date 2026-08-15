@@ -23,6 +23,7 @@ export default function Footer() {
             <li><Link href="/moduller/itsm" className="hover:text-puki-dark">Puki ITSM</Link></li>
             <li><Link href="/moduller/egitim" className="hover:text-puki-dark">Puki Akademi</Link></li>
             <li><Link href="/demo" className="hover:text-puki-dark">Demo talep et</Link></li>
+            <li><Link href="/hesap" className="hover:text-puki-dark">Hesabım</Link></li>
           </ul>
         </div>
         <div>

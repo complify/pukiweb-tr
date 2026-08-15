@@ -87,6 +87,7 @@ globalThis.__PUKI_ORDERS__ = mem;
 const SUB_KEY = (subRef: string) => `puki:sub:${subRef}`;
 const CFT_KEY = (token: string) => `puki:cft:${token}`;
 const PRODUCT_KEY = "puki:iyzico:product";
+const CUST_KEY = (email: string) => `puki:custord:${email.toLowerCase()}`;
 
 declare global {
   // eslint-disable-next-line no-var
@@ -102,6 +103,26 @@ const cftIdx: Map<string, string> = globalThis.__PUKI_CFTIDX__ ?? new Map();
 globalThis.__PUKI_CFTIDX__ = cftIdx;
 const kvMem: Map<string, string> = globalThis.__PUKI_KV__ ?? new Map();
 globalThis.__PUKI_KV__ = kvMem;
+
+declare global {
+  // eslint-disable-next-line no-var
+  var __PUKI_CUSTIDX__: Map<string, Set<string>> | undefined;
+}
+const custIdx: Map<string, Set<string>> = globalThis.__PUKI_CUSTIDX__ ?? new Map();
+globalThis.__PUKI_CUSTIDX__ = custIdx;
+
+export async function getOrdersByEmail(email: string): Promise<Order[]> {
+  const key = email.toLowerCase();
+  if (redis) {
+    const refs = (await redis.zrange<string[]>(CUST_KEY(key), 0, 199, { rev: true })) || [];
+    if (!refs.length) return [];
+    const rows = (await redis.mget<Order[]>(...refs.map(KEY))) || [];
+    return (rows.filter(Boolean) as Order[]).sort((a, b) => b.createdAt - a.createdAt);
+  }
+  const set = custIdx.get(key);
+  if (!set) return [];
+  return [...set].map((r) => mem.get(r)).filter(Boolean).sort((a: any, b: any) => b.createdAt - a.createdAt) as Order[];
+}
 
 export async function mapSubToOrder(subRef: string, ref: string): Promise<void> {
   if (redis) await redis.set(SUB_KEY(subRef), ref); else subIdx.set(subRef, ref);
@@ -140,8 +161,14 @@ export async function saveOrder(o: Order): Promise<void> {
   if (redis) {
     await redis.set(KEY(o.ref), o);
     await redis.zadd(INDEX, { score: o.createdAt, member: o.ref });
+    if (o.customer?.email) await redis.zadd(CUST_KEY(o.customer.email), { score: o.createdAt, member: o.ref });
   } else {
     mem.set(o.ref, o);
+    if (o.customer?.email) {
+      const k = o.customer.email.toLowerCase();
+      const set = custIdx.get(k) ?? new Set<string>();
+      set.add(o.ref); custIdx.set(k, set);
+    }
   }
 }
 
