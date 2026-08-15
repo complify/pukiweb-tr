@@ -18,12 +18,14 @@ function parseFrom(s: string): { email: string; name?: string } {
   return { email: s.trim() };
 }
 
-export async function sendMail(m: MailInput): Promise<boolean> {
+export interface MailResult { ok: boolean; status?: number; error?: string; skipped?: boolean }
+
+export async function sendMailRaw(m: MailInput): Promise<MailResult> {
   const key = process.env.SENDGRID_API_KEY;
-  const fromRaw = process.env.MAIL_FROM || "Puki <destek@puki.com.tr>";
+  const fromRaw = process.env.MAIL_FROM || "Puki <no-reply@pukisoft.com>";
   if (!key) {
     console.warn("[mail] SENDGRID_API_KEY yok — e-posta gönderimi atlandı.");
-    return false;
+    return { ok: false, skipped: true, error: "SENDGRID_API_KEY yok" };
   }
   const from = parseFrom(fromRaw);
   const toList = (Array.isArray(m.to) ? m.to : [m.to]).map((email) => ({ email }));
@@ -43,14 +45,19 @@ export async function sendMail(m: MailInput): Promise<boolean> {
       body: JSON.stringify(body),
     });
     if (r.status !== 202) {
-      console.error("[mail] SendGrid hatası", r.status, await r.text().catch(() => ""));
-      return false;
+      const txt = await r.text().catch(() => "");
+      console.error("[mail] SendGrid hatası", r.status, txt);
+      return { ok: false, status: r.status, error: txt || `HTTP ${r.status}` };
     }
-    return true;
-  } catch (e) {
+    return { ok: true, status: 202 };
+  } catch (e: any) {
     console.error("[mail] istisna", e);
-    return false;
+    return { ok: false, error: e?.message || "istisna" };
   }
+}
+
+export async function sendMail(m: MailInput): Promise<boolean> {
+  return (await sendMailRaw(m)).ok;
 }
 
 // Alıcı: iç bildirimlerin gideceği adres (varsayılan: sahibin adresi).
