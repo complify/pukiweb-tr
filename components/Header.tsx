@@ -54,9 +54,6 @@ export default function Header() {
           <Link href="/hesap" className="hidden sm:inline text-sm font-semibold text-[#5e6278] hover:text-puki-dark" title="Abonelik & ödeme portalı">
             Hesabım
           </Link>
-          <a href="https://tr.pukisoft.com/login" className="hidden sm:inline text-sm font-semibold text-[#5e6278] hover:text-puki-dark" title="GRC uygulamasına giriş">
-            Giriş
-          </a>
           <Link href="/demo" className="text-sm font-bold text-white bg-puki hover:bg-puki-dark px-4 py-2 rounded-xl shadow-soft">
             Demo Talep Et
           </Link>
