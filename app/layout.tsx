@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CookieConsent from "@/components/CookieConsent";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 import { LangProvider } from "@/components/LangProvider";
 import { getLang } from "@/lib/lang-server";
 import { getDict } from "@/lib/i18n";
@@ -22,6 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
       </head>
       <body className="min-h-screen flex flex-col font-sans">
+        <GoogleAnalytics />
         <LangProvider lang={lang}>
           <Header lang={lang} />
           <main className="flex-1">{children}</main>

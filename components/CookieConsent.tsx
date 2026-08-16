@@ -23,7 +23,15 @@ export default function CookieConsent() {
       localStorage.setItem(KEY, JSON.stringify({ choice, at: new Date().toISOString() }));
     } catch {}
     setShow(false);
-    // Not: Analitik/pazarlama çerezleri yalnız choice === "all" ise yüklenmelidir.
+    // Analitik çerezleri yalnız "all" seçilirse Google Consent Mode üzerinden açılır.
+    try {
+      const g = (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag;
+      if (g) {
+        g("consent", "update", {
+          analytics_storage: choice === "all" ? "granted" : "denied",
+        });
+      }
+    } catch {}
   };
 
   if (!show) return null;
