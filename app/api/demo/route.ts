@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { saveLead, type Lead } from "@/lib/leads";
 import { sendMail, notifyTo } from "@/lib/mail";
 import { MODULE_DETAILS } from "@/lib/module-content";
+import { isFreeEmail, CORPORATE_EMAIL_ERROR } from "@/lib/corporate-email";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -55,6 +56,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Ad Soyad, şirket ve e-posta zorunludur." }, { status: 400 });
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))
     return NextResponse.json({ error: "Geçerli bir e-posta adresi girin." }, { status: 400 });
+
+  if (isFreeEmail(email))
+    return NextResponse.json({ error: CORPORATE_EMAIL_ERROR }, { status: 422 });
 
   const lead: Lead = {
     ref: makeRef(),

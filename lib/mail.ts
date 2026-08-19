@@ -62,5 +62,5 @@ export async function sendMail(m: MailInput): Promise<boolean> {
 
 // Alıcı: iç bildirimlerin gideceği adres (varsayılan: sahibin adresi).
 export function notifyTo(): string {
-  return process.env.LEAD_NOTIFY_TO || process.env.ADMIN_EMAIL || "omer@complify.io";
+  return process.env.LEAD_NOTIFY_TO || "destek@puki.com.tr";
 }

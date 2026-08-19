@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { MODULE_DETAILS } from "@/lib/module-content";
 import { useDict } from "@/components/LangProvider";
+import { isFreeEmail, CORPORATE_EMAIL_ERROR } from "@/lib/corporate-email";
 
 const MODULE_ORDER = ["bgys", "kvys", "isys", "yzys", "soc2", "tisax", "spice", "itsm", "qms", "egitim"];
 const MODULES = MODULE_ORDER.map((code) => MODULE_DETAILS[code]).filter(Boolean);
@@ -28,6 +29,7 @@ export default function DemoForm() {
     e.preventDefault();
     setErr(null);
     if (!name.trim() || !company.trim() || !email.trim()) { setErr(f.errRequired); return; }
+    if (isFreeEmail(email)) { setErr(CORPORATE_EMAIL_ERROR); return; }
     setBusy(true);
     try {
       const r = await fetch("/api/demo", {
